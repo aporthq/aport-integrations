@@ -4,8 +4,44 @@ import os
 from typing import Optional, Dict, Any, Callable
 from fastapi import Request, HTTPException, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from aporthq_sdk import APortClient
+# from aporthq_sdk import APortClient  # Uncomment when package is available
 from .exceptions import APortError, VerificationError
+
+
+class MockAPortClient:
+    """Mock APort Client for template demonstration.
+    
+    In production, replace with: from aporthq_sdk import APortClient
+    """
+    
+    def __init__(self, api_key: Optional[str] = None, base_url: Optional[str] = None, **kwargs):
+        self.api_key = api_key
+        self.base_url = base_url or 'https://api.aport.io'
+    
+    async def verify(self, policy: str, agent_id: str, context: Optional[Dict[str, Any]] = None) -> 'MockVerificationResult':
+        """Mock verification - always returns success for template."""
+        print(f"[MOCK] Verifying agent {agent_id} against policy {policy}")
+        return MockVerificationResult(
+            verified=True,
+            passport={
+                'agentId': agent_id,
+                'capabilities': ['read', 'write'],
+                'limits': {'requests': 1000, 'period': '1h'}
+            },
+            policy=policy,
+            message="Mock verification successful"
+        )
+
+
+class MockVerificationResult:
+    """Mock verification result for template demonstration."""
+    
+    def __init__(self, verified: bool, passport: Dict[str, Any], policy: str, message: str, details: Optional[Dict[str, Any]] = None):
+        self.verified = verified
+        self.passport = passport
+        self.policy = policy
+        self.message = message
+        self.details = details or {}
 
 
 class APortMiddleware:
@@ -24,7 +60,7 @@ class APortMiddleware:
             base_url: APort API base URL. If not provided, will use APORT_BASE_URL env var.
             **kwargs: Additional client options
         """
-        self.client = APortClient(
+        self.client = MockAPortClient(
             api_key=api_key or os.getenv('APORT_API_KEY'),
             base_url=base_url or os.getenv('APORT_BASE_URL', 'https://api.aport.io'),
             **kwargs

@@ -1,4 +1,28 @@
-const { APortClient } = require("@aporthq/sdk-node");
+/**
+ * Mock APort Client for template demonstration
+ * In production, replace with: const { APortClient } = require("@aporthq/sdk-node");
+ */
+class MockAPortClient {
+  constructor(options = {}) {
+    this.apiKey = options.apiKey || process.env.APORT_API_KEY;
+    this.baseUrl = options.baseUrl || process.env.APORT_BASE_URL || "https://api.aport.io";
+  }
+
+  async verify(policy, agentId, options = {}) {
+    // Mock verification - always returns success for template
+    console.log(`[MOCK] Verifying agent ${agentId} against policy ${policy}`);
+    return {
+      verified: true,
+      passport: {
+        agentId: agentId,
+        capabilities: ["read", "write"],
+        limits: { requests: 1000, period: "1h" }
+      },
+      policy: policy,
+      message: "Mock verification successful"
+    };
+  }
+}
 
 /**
  * APort middleware for Express.js applications
@@ -9,7 +33,7 @@ const { APortClient } = require("@aporthq/sdk-node");
  * @returns {Function} Express middleware function
  */
 function createAPortMiddleware(options = {}) {
-  const client = new APortClient({
+  const client = new MockAPortClient({
     apiKey: options.apiKey || process.env.APORT_API_KEY,
     baseUrl:
       options.baseUrl || process.env.APORT_BASE_URL || "https://api.aport.io",
