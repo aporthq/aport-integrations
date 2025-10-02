@@ -36,61 +36,70 @@ This repository houses community-contributed integrations, SDKs, middleware, and
 
 The official APort SDKs are maintained in the [aport-sdks repository](https://github.com/aporthq/aport-sdks).
 
-### Node.js/JavaScript
+### ✅ Currently Available
 
+#### Node.js/JavaScript
 - **Core SDK**: [@aporthq/sdk-node](https://github.com/aporthq/aport-sdks/tree/main/javascript) - Core Node.js SDK
 - **Express Middleware**: [@aporthq/middleware-express](https://github.com/aporthq/aport-sdks/tree/main/express) - Express.js middleware
-- **Next.js Middleware**: [@aporthq/middleware-nextjs](https://github.com/aporthq/aport-sdks/tree/main/nextjs) - Next.js middleware (needed)
-- **n8n Node**: [@aporthq/n8n-node](https://github.com/aporthq/aport-sdks/tree/main/n8n) - Custom n8n node (needed)
-- **Zapier App**: [@aporthq/zapier-app](https://github.com/aporthq/aport-sdks/tree/main/zapier) - Zapier custom app (needed)
 
-### Python
-
+#### Python
 - **Core SDK**: [aporthq-sdk-python](https://github.com/aporthq/aport-sdks/tree/main/python) - Core Python SDK
 - **FastAPI Middleware**: [agent-passport-middleware-fastapi](https://github.com/aporthq/aport-sdks/tree/main/fastapi) - FastAPI middleware
-- **Django Middleware**: [aporthq-middleware-django](https://github.com/aporthq/aport-sdks/tree/main/django) - Django middleware (needed)
-- **LangChain Integration**: [aporthq-langchain](https://github.com/aporthq/aport-sdks/tree/main/langchain) - LangChain tool guard (needed)
-- **CrewAI Integration**: [aporthq-crewai](https://github.com/aporthq/aport-sdks/tree/main/crewai) - CrewAI decorator (needed)
-- **LangGraph Integration**: [aporthq-langgraph](https://github.com/aporthq/aport-sdks/tree/main/langgraph) - LangGraph checkpoints (needed)
 
-### PHP
+### 🚧 In Development (Hacktoberfest 2025)
 
-- **Core SDK**: [aporthq-sdk-php](https://github.com/aporthq/aport-sdks/tree/main/php) - Core PHP SDK (needed)
-- **Laravel Middleware**: [aporthq-middleware-laravel](https://github.com/aporthq/aport-sdks/tree/main/laravel) - Laravel middleware (needed)
-- **WordPress Plugin**: [aporthq-woocommerce](https://github.com/aporthq/aport-sdks/tree/main/woocommerce) - WooCommerce plugin (needed)
+We're actively building more SDKs and integrations! Check out our [open issues](https://github.com/aporthq/aport-integrations/issues) to contribute:
 
-### Ruby
+#### High Priority SDKs
+- **Go SDK** - Core Go SDK with Gin, Echo, Fiber middleware
+- **PHP SDK** - Core PHP SDK with Laravel middleware
+- **Ruby SDK** - Core Ruby SDK with Rails gem
 
-- **Core SDK**: [aporthq-sdk-ruby](https://github.com/aporthq/aport-sdks/tree/main/ruby) - Core Ruby SDK (needed)
-- **Rails Gem**: [aporthq-rails](https://github.com/aporthq/aport-sdks/tree/main/rails) - Rails gem (needed)
+#### Agent Framework Integrations
+- **LangChain Integration** - Tool guard for LangChain
+- **CrewAI Integration** - Task verification decorator
+- **n8n Workflow Node** - Custom n8n node for policy checks
 
-### Go
+#### Platform Integrations
+- **Zapier App** - Custom Zapier app for APort verification
+- **GitHub App** - PR/Merge verification
+- **Discord Bot** - Team verification workflows
 
-- **Core SDK**: [aporthq-sdk-go](https://github.com/aporthq/aport-sdks/tree/main/go) - Core Go SDK (needed)
-- **Gin Middleware**: [aporthq-middleware-gin](https://github.com/aporthq/aport-sdks/tree/main/gin) - Gin framework middleware (needed)
-- **Echo Middleware**: [aporthq-middleware-echo](https://github.com/aporthq/aport-sdks/tree/main/echo) - Echo framework middleware (needed)
-- **Fiber Middleware**: [aporthq-middleware-fiber](https://github.com/aporthq/aport-sdks/tree/main/fiber) - Fiber framework middleware (needed)
+#### Developer Experience
+- **VS Code Extension** - Code snippets and syntax highlighting
+- **Postman Collection** - API testing and CI/CD integration
+- **CLI Tool** - Quick integration setup
 
-### E-commerce Platforms
+#### E-commerce & Financial
+- **Shopify App** - Refund protection for e-commerce
+- **Stripe Integration** - Payment verification
+- **Banking APIs** - Financial services integration
 
-- **Shopify App**: [aporthq-shopify](https://github.com/aporthq/aport-sdks/tree/main/shopify) - Shopify app with refund guardrails (needed)
-- **Stripe Integration**: [aporthq-stripe](https://github.com/aporthq/aport-sdks/tree/main/stripe) - Stripe Connect verification (needed)
+#### Protocol Bridges
+- **OpenAPI Spec** - OpenAPI 3.1 specification for APort API
+- **AP2 Bridge** - AP2 payment authorization bridge
+- **SPIFFE/SPIRE** - Enterprise identity integration
 
-### Developer Tools
+## 🎉 Hacktoberfest 2025 Progress
 
-- **CLI Tool**: [@aporthq/cli](https://github.com/aporthq/aport-sdks/tree/main/cli) - APort CLI for scaffolding (needed)
-- **VS Code Extension**: [aporthq-vscode](https://github.com/aporthq/aport-sdks/tree/main/vscode) - VS Code extension (needed)
-- **Postman Collection**: [aporthq-postman](https://github.com/aporthq/aport-sdks/tree/main/postman) - Postman collection (needed)
+We're actively building the APort ecosystem with **22+ open issues** and **6 issues already picked up** by contributors! 
 
-### Protocol Bridges
+### 📊 Current Status
+- **Total Issues**: 22 open issues
+- **Issues Picked Up**: 6 (27% pickup rate in 8 hours!)
+- **Total Bounty Pool**: $175+ USD
+- **Categories**: 10+ different integration types
 
-- **OpenAPI Spec**: [aporthq-openapi](https://github.com/aporthq/aport-sdks/tree/main/openapi) - OpenAPI 3.1 specification (needed)
-- **AP2 Bridge**: [aporthq-ap2](https://github.com/aporthq/aport-sdks/tree/main/ap2) - AP2 payment bridge (needed)
-- **SPIFFE/SPIRE**: [aporthq-spiffe](https://github.com/aporthq/aport-sdks/tree/main/spiffe) - SPIFFE/SPIRE integration (needed)
+### 🏆 Most Popular Issues (Already Picked Up)
+1. **Blog Post Tutorial** - 2 assignees
+2. **n8n Workflow Node** - 1 assignee  
+3. **Go SDK** - 1 assignee
+4. **Next.js Middleware** - 2 assignees
+5. **AP2 Payment Bridge** - 2 assignees
+6. **Zapier Custom App** - 1 assignee
 
-## 🎯 Strategic Need for Comprehensive SDK Coverage
+### 🎯 Strategic Need for Comprehensive SDK Coverage
 
-Based on our [Hacktoberfest 2025 strategy](https://github.com/aporthq/aport-integrations/blob/main/HACKTOBERFEST-STRATEGY.md), we need to establish APort as the **default trust rail for the AI agent economy**. This requires:
 
 ### **Agent Framework Coverage** (Highest Priority)
 - **LangChain**: Most popular AI framework - needs tool guard integration
@@ -381,6 +390,22 @@ We're participating in [Hacktoberfest 2025](https://hacktoberfest.digitalocean.c
 
 [View all Hacktoberfest issues →](https://github.com/aporthq/aport-integrations/issues?q=is:issue+is:open+label:hacktoberfest)
 
+## 📈 Key Insights from Issue Pickup Analysis
+
+### What Contributors Want:
+1. **"Good First Issue" Label** - 4/6 picked issues have this label
+2. **Content Creation** - Blog posts and tutorials are highly attractive
+3. **Integration & Middleware** - 5/6 issues are integration-related
+4. **Automation Tools** - n8n and Zapier appeal to no-code audience
+5. **Financial Use Cases** - Payment/AP2 bridge resonates strongly
+
+### Best Practices for New Issues:
+- Use `good-first-issue` label for beginner-friendly tasks
+- Focus on content creation and developer experience
+- Target specific frameworks (Next.js, Go, n8n, Zapier)
+- Include clear success criteria and bounty amounts
+- Provide scaffolding templates for complex integrations
+
 ---
 
 ## 🤝 Contributing
@@ -389,12 +414,16 @@ We love contributions! Whether you're fixing bugs, adding features, or creating 
 
 ### 🚀 Quick Contribution Guide
 
-1. **Fork** the repository
-2. **Create** a feature branch: `git checkout -b feature/amazing-integration`
-3. **Follow** our [coding standards](CONTRIBUTING.md#coding-standards)
-4. **Test** your integration thoroughly
-5. **Document** your work with clear README files
-6. **Submit** a pull request
+1. **Browse Issues**: Check our [open Hacktoberfest issues](https://github.com/aporthq/aport-integrations/issues?q=is:issue+is:open+label:hacktoberfest)
+2. **Use Templates**: Copy scaffolding templates from `/templates/` directory
+3. **Follow Guidelines**: See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed instructions
+4. **Get Rewarded**: Earn $5-$40 USD per completed issue!
+
+### 🎯 High-Impact Areas
+- **Agent Framework Integrations** (LangChain, CrewAI, n8n)
+- **Platform Integrations** (Zapier, GitHub, Discord)
+- **Developer Experience** (VS Code, CLI, Postman)
+- **Content Creation** (Tutorials, blog posts, videos)
 
 ### 📋 Integration Requirements
 
@@ -418,23 +447,20 @@ We love contributions! Whether you're fixing bugs, adding features, or creating 
 ## 📚 Resources
 
 ### 🔗 **APort Resources**
+- [📖 Core Features](https://aport.io/features) - Complete list of APort Features
 - [📖 Documentation](https://aport.io/docs) - Complete guides and API reference
-- [🎮 Playground](https://aport.io/playground) - Try APort in your browser
-- [📺 Video Tutorials](https://youtube.com/@aport) - Step-by-step guides
+- [🎮 Swagger Documentation](https://aport.io/api/swagger-ui) - Try APort in your browser
 - [💡 Examples](https://github.com/aporthq/aport-examples) - Real-world implementations
 
 ### 🛠️ **Development Resources**
-- [API Reference](https://api.aport.io/docs) - Complete API documentation
+- [API Reference](https://aport.io/docs/) - Complete API documentation
 - [Policy Packs](https://github.com/aporthq/aport-policies) - Pre-built policy definitions
 - [SDKs](https://github.com/aporthq/aport-sdks) - Language-specific SDKs
 - [Specification](https://github.com/aporthq/aport-spec) - AI Passport Specification
 - [GitHub Actions](https://github.com/aporthq/policy-verify-action) - CI/CD integrations
 
 ### 💬 **Community**
-- [Discord](https://discord.gg/aport) - Chat with the community
 - [GitHub Discussions](https://github.com/aporthq/aport-integrations/discussions) - Ask questions
-- [Twitter](https://twitter.com/aporthq) - Follow for updates
-- [LinkedIn](https://linkedin.com/company/aporthq) - Professional updates
 
 ---
 
