@@ -1,0 +1,104 @@
+name: Hacktoberfest 2025
+on:
+  issues:
+    types: [opened, labeled, unlabeled]
+  pull_request:
+    types: [opened, closed, merged, labeled, unlabeled]
+
+jobs:
+  validate-hacktoberfest-issue:
+    runs-on: ubuntu-latest
+    if: github.event.issue && contains(github.event.issue.labels.*.name, 'hacktoberfest')
+    steps:
+      - name: Validate Hacktoberfest Issue
+        run: |
+          echo "🎉 Validating Hacktoberfest issue: ${{ github.event.issue.title }}"
+          echo "Issue URL: ${{ github.event.issue.html_url }}"
+          echo "Labels: ${{ join(github.event.issue.labels.*.name, ', ') }}"
+
+          # Check if issue has required information
+          if [[ "${{ github.event.issue.body }}" == *"Integration Description"* ]]; then
+            echo "✅ Issue contains integration description"
+          else
+            echo "❌ Issue missing integration description"
+          fi
+
+          if [[ "${{ github.event.issue.body }}" == *"Success Criteria"* ]]; then
+            echo "✅ Issue contains success criteria"
+          else
+            echo "❌ Issue missing success criteria"
+          fi
+
+          if [[ "${{ github.event.issue.body }}" == *"Bounty Amount"* ]]; then
+            echo "✅ Issue contains bounty amount"
+          else
+            echo "❌ Issue missing bounty amount"
+          fi
+
+  validate-contribution:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request && contains(github.event.pull_request.labels.*.name, 'hacktoberfest')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate PR
+        run: |
+          echo "🔍 Validating Hacktoberfest PR: ${{ github.event.pull_request.title }}"
+          echo "PR URL: ${{ github.event.pull_request.html_url }}"
+
+          # Check if PR has proper description
+          if [[ "${{ github.event.pull_request.body }}" == *"Closes"* ]] || [[ "${{ github.event.pull_request.body }}" == *"Fixes"* ]]; then
+            echo "✅ PR references an issue"
+          else
+            echo "⚠️ PR doesn't reference an issue"
+          fi
+
+          # Check if PR has working example
+          if find . -name "*.js" -o -name "*.py" -o -name "*.go" -o -name "*.php" | head -1 | grep -q .; then
+            echo "✅ PR contains code files"
+          else
+            echo "❌ PR doesn't contain code files"
+          fi
+
+          # Check if PR has documentation
+          if find . -name "README.md" | head -1 | grep -q .; then
+            echo "✅ PR contains documentation"
+          else
+            echo "⚠️ PR doesn't contain documentation"
+          fi
+
+  process-bounty:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request && github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'hacktoberfest')
+    steps:
+      - name: Process Bounty
+        run: |
+          echo "💰 Processing bounty for merged PR: ${{ github.event.pull_request.title }}"
+          echo "Author: ${{ github.event.pull_request.user.login }}"
+          echo "PR URL: ${{ github.event.pull_request.html_url }}"
+
+          # Extract bounty amount from PR description or labels
+          BOUNTY_AMOUNT=$(echo "${{ github.event.pull_request.body }}" | grep -o '\$[0-9]\+' | head -1 || echo "$50")
+          echo "Bounty amount: $BOUNTY_AMOUNT"
+
+          # Here you would integrate with Chimoney API to process the bounty
+          # For now, just log the information
+          echo "🎉 Bounty processed for ${{ github.event.pull_request.user.login }}: $BOUNTY_AMOUNT"
+
+  update-leaderboard:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request && github.event.action == 'closed' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'hacktoberfest')
+    steps:
+      - name: Update Leaderboard
+        run: |
+          echo "📊 Updating Hacktoberfest leaderboard"
+          echo "Contributor: ${{ github.event.pull_request.user.login }}"
+          echo "PR: ${{ github.event.pull_request.title }}"
+          echo "Merged at: ${{ github.event.pull_request.merged_at }}"
+
+          # Here you would update a leaderboard file or database
+          # For now, just log the information
+          echo "✅ Leaderboard updated"

@@ -1,0 +1,34 @@
+{
+  "name": "aport-middleware-express",
+  "version": "1.0.0",
+  "description": "APort middleware for Express.js applications",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node examples/server.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "eslint src/ examples/",
+    "lint:fix": "eslint src/ examples/ --fix"
+  },
+  "keywords": [
+    "aport",
+    "middleware",
+    "express",
+    "security",
+    "verification"
+  ],
+  "author": "APort Community",
+  "license": "MIT",
+  "dependencies": {
+    "@aporthq/sdk-node": "^0.1.0",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "eslint": "^8.57.0",
+    "supertest": "^6.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "name": "aport-cli-example",
+  "version": "1.0.0",
+  "description": "APort CLI tool for testing agent verification and passport management",
+  "main": "src/index.js",
+  "bin": {
+    "aport": "./src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "jest",
+    "dev": "node src/index.js"
+  },
+  "keywords": [
+    "aport",
+    "cli",
+    "agent-verification",
+    "passport",
+    "hacktoberfest"
+  ],
+  "author": "APort Community",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^11.1.0",
+    "axios": "^1.6.0",
+    "chalk": "^4.1.2",
+    "ora": "^5.4.1",
+    "inquirer": "^8.2.6",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

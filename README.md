@@ -167,18 +167,26 @@ aport-integrations/
 ├── examples/                    # Working integration examples
 │   ├── agent-frameworks/        # LangChain, CrewAI, n8n, etc.
 │   ├── ecommerce/              # Shopify, WooCommerce, Stripe
-│   ├── developer-tools/        # CLI, VS Code extension, Postman
 │   ├── middleware/             # Express, FastAPI, Django, etc.
 │   └── protocol-bridges/       # OpenAPI, AP2, SPIFFE/SPIRE
+├── tools/                      # Developer tools and utilities
+│   ├── cli/                    # APort CLI for scaffolding
+│   ├── vscode-extension/       # VS Code extension
+│   └── postman-collection/     # Postman collection
+├── templates/                  # Integration scaffolding templates
+│   ├── javascript-middleware/  # Express.js template
+│   └── python-middleware/      # FastAPI template
 ├── sdk/                        # References to official SDKs
 │   └── README.md               # Links to aport-sdks repository
-├── tools/                      # Developer tools and utilities
-│   ├── cli/
-│   ├── vscode-extension/
-│   └── postman-collection/
-├── templates/                  # Integration templates
 └── docs/                       # Integration documentation
 ```
+
+### 📋 Directory Purposes
+
+- **`examples/`** - **Working integration examples** that demonstrate real-world usage of APort
+- **`tools/`** - **Developer tools and utilities** (CLI, VS Code extension, Postman collection)
+- **`templates/`** - **Scaffolding templates** for quick integration development and consistent structure
+- **`sdk/`** - **References to official APort SDKs** maintained in the aport-sdks repository
 
 ---
 

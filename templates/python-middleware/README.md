@@ -1,17 +1,27 @@
-# APort FastAPI Middleware
+# APort FastAPI Middleware Template
 
-APort middleware for FastAPI applications that provides agent verification and policy enforcement.
+**Scaffolding template** for building APort FastAPI middleware integrations.
+
+> **Note**: This is a template for scaffolding new integrations. For the official middleware, see [agent-passport-middleware-fastapi](https://github.com/aporthq/aport-sdks/tree/main/fastapi).
 
 ## 🚀 Quick Start
 
-### Installation
+### 1. Copy the Template
 
 ```bash
-# Install the official APort FastAPI middleware
-pip install agent-passport-middleware-fastapi
+# Copy this template to create your integration
+cp -r templates/python-middleware examples/your-integration-name
+cd examples/your-integration-name
+```
 
-# Or install the core SDK separately
+### 2. Install Dependencies
+
+```bash
+# Install the official APort SDK
 pip install aporthq-sdk-python
+
+# Install other dependencies
+pip install -e .
 ```
 
 ### Basic Usage

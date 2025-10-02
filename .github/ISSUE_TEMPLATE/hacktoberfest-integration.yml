@@ -1,0 +1,78 @@
+name: Hacktoberfest Integration
+description: Template for Hacktoberfest integration issues
+title: "[Hacktoberfest] "
+labels: ["hacktoberfest", "integration"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for contributing to APort Integrations! 🎉
+
+        This issue is part of our Hacktoberfest 2025 campaign. We're excited to see what you'll build!
+
+        **🎁 Rewards:**
+        - 💰 Bounty: $15-$50 per merged PR
+        - 👕 Swag: APort Champion T-shirt
+        - 🏆 Recognition: Featured on our website
+
+        **📚 Resources:**
+        - [APort Documentation](https://aport.io/docs)
+        - [API Reference](https://api.aport.io/docs)
+        - [Discord Community](https://discord.gg/aport)
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Integration Description
+      description: Describe the integration you want to build
+      placeholder: "Create a [Framework] integration that..."
+      value: ""
+    validations:
+      required: true
+  - type: textarea
+    id: success-criteria
+    attributes:
+      label: Success Criteria
+      description: What needs to be completed for this issue to be considered done?
+      placeholder: "- Working integration in /examples/[category]/[name]"
+      value: ""
+    validations:
+      required: true
+  - type: dropdown
+    id: difficulty
+    attributes:
+      label: Difficulty Level
+      options:
+        - beginner
+        - intermediate
+        - advanced
+      value: "intermediate"
+    validations:
+      required: true
+  - type: textarea
+    id: bounty
+    attributes:
+      label: Bounty Amount
+      description: USD amount for this contribution
+      placeholder: "$50"
+      value: "$50"
+    validations:
+      required: true
+  - type: textarea
+    id: tech-stack
+    attributes:
+      label: Technology Stack
+      description: What technologies/frameworks will be used?
+      placeholder: "JavaScript, Node.js, Express.js, etc."
+      value: ""
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: Specific requirements for this integration
+      placeholder: "- Must include working example\n- Must have proper error handling\n- Must include documentation"
+      value: ""
+    validations:
+      required: true
