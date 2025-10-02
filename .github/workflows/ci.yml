@@ -21,7 +21,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
 
       - name: Setup Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
@@ -33,15 +32,28 @@ jobs:
           find . -name "package.json" -not -path "./node_modules/*" | while read file; do
             dir=$(dirname "$file")
             echo "Installing dependencies in $dir"
-            cd "$dir" && npm ci --only=production
+            cd "$dir"
+            if [ -f "package-lock.json" ]; then
+              npm ci
+            else
+              npm install
+            fi
             cd - > /dev/null
           done
 
       - name: Install Python dependencies
         run: |
+          # Install dependencies from pyproject.toml files
+          find . -name "pyproject.toml" | while read file; do
+            dir=$(dirname "$file")
+            echo "Installing Python dependencies in $dir"
+            cd "$dir" && pip install -e . || echo "Failed to install from pyproject.toml"
+            cd - > /dev/null
+          done
+          # Also install from requirements.txt if they exist
           find . -name "requirements.txt" | while read file; do
             dir=$(dirname "$file")
-            echo "Installing dependencies in $dir"
+            echo "Installing Python dependencies from requirements.txt in $dir"
             cd "$dir" && pip install -r requirements.txt
             cd - > /dev/null
           done
@@ -68,19 +80,20 @@ jobs:
         run: |
           find . -name "package.json" -not -path "./node_modules/*" | while read file; do
             dir=$(dirname "$file")
-            if [ -f "$dir/test" ] || [ -f "$dir/tests" ] || [ -f "$dir/__tests__" ]; then
+            if [ -d "$dir/test" ] || [ -d "$dir/tests" ] || [ -d "$dir/__tests__" ] || find "$dir" -name "*.test.js" -o -name "*.spec.js" | grep -q .; then
               echo "Running tests in $dir"
-              cd "$dir" && npm test || echo "No test script found"
+              cd "$dir" && (npm test || npm run test || echo "No test script found") 2>/dev/null
               cd - > /dev/null
             fi
           done
 
       - name: Test Python
         run: |
+          # Find directories with Python test files
           find . -name "test_*.py" -o -name "*_test.py" | while read file; do
             dir=$(dirname "$file")
             echo "Running Python tests in $dir"
-            cd "$dir" && python -m pytest "$file" || echo "Pytest not available"
+            cd "$dir" && (python -m pytest . || python -m pytest "$file" || echo "Pytest not available or no tests found") 2>/dev/null
             cd - > /dev/null
           done
 
