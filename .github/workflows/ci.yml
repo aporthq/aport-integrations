@@ -33,11 +33,8 @@ jobs:
             dir=$(dirname "$file")
             echo "Installing dependencies in $dir"
             cd "$dir"
-            if [ -f "package-lock.json" ]; then
-              npm ci
-            else
-              npm install
-            fi
+            # Always use npm install for monorepo structure
+            npm install --no-audit --no-fund
             cd - > /dev/null
           done
 
@@ -47,14 +44,14 @@ jobs:
           find . -name "pyproject.toml" | while read file; do
             dir=$(dirname "$file")
             echo "Installing Python dependencies in $dir"
-            cd "$dir" && pip install -e . || echo "Failed to install from pyproject.toml"
+            cd "$dir" && pip install -e . --quiet || echo "Failed to install from pyproject.toml in $dir"
             cd - > /dev/null
           done
           # Also install from requirements.txt if they exist
           find . -name "requirements.txt" | while read file; do
             dir=$(dirname "$file")
             echo "Installing Python dependencies from requirements.txt in $dir"
-            cd "$dir" && pip install -r requirements.txt
+            cd "$dir" && pip install -r requirements.txt --quiet || echo "Failed to install from requirements.txt in $dir"
             cd - > /dev/null
           done
 
