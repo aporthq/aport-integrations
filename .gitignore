@@ -135,4 +135,4 @@ temp/
 # APort specific
 *.aport
 aport-config.json
-.HACKTOBERFEST-STRATEGY.md
+HACKTOBERFEST-STRATEGY.md
