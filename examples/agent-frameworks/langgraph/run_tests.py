@@ -13,7 +13,7 @@ import traceback
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
 from checkpoint_guard import APortCheckpointGuard
-from client import APortClient, MockAPortSDK, MockVerificationResult
+from client import APortClient, MockAPortSDK
 from exceptions import VerificationError, CheckpointError, ConfigurationError
 
 
@@ -98,27 +98,44 @@ class SimpleTestRunner:
 
 
 # Test functions
-def test_mock_verification_result(runner):
-    """Test MockVerificationResult."""
-    result = MockVerificationResult(verified=True, agent_id="test_agent", policy="test.policy")
-    
-    runner.assert_true(result.verified)
-    runner.assert_equal(result.agent_id, "test_agent")
-    runner.assert_equal(result.policy, "test.policy")
-    runner.assert_true(result.passport is not None)
-
-
-async def test_mock_sdk(runner):
-    """Test MockAPortSDK."""
+async def test_mock_sdk_api_structure(runner):
+    """Test MockAPortSDK with new API structure."""
     sdk = MockAPortSDK("test_key")
     
     # Test successful verification
-    result = await sdk.verify("test.policy", "normal_agent")
-    runner.assert_true(result.verified)
+    result = await sdk.verify_policy(
+        agent_id="test_agent",
+        policy_id="data.export.v1",
+        context={"export_type": "users", "format": "csv"}
+    )
+    
+    runner.assert_true(result["verified"])
+    runner.assert_true(result["decision"]["allow"])
+    runner.assert_true("decision_id" in result["decision"])
+    runner.assert_true(result["passport"] is not None)
+
+
+async def test_mock_sdk(runner):
+    """Test MockAPortSDK with new API structure."""
+    sdk = MockAPortSDK("test_key")
+    
+    # Test successful verification
+    result = await sdk.verify_policy(
+        agent_id="normal_agent",
+        policy_id="payments.refund.v1",
+        context={"amount": 100, "currency": "USD"}
+    )
+    runner.assert_true(result["verified"])
+    runner.assert_true(result["decision"]["allow"])
     
     # Test failed verification
-    result = await sdk.verify("test.policy", "agt_user_denied")
-    runner.assert_false(result.verified)
+    result = await sdk.verify_policy(
+        agent_id="agt_user_denied",
+        policy_id="payments.refund.v1",
+        context={"amount": 100, "currency": "USD"}
+    )
+    runner.assert_false(result["verified"])
+    runner.assert_false(result["decision"]["allow"])
 
 
 def test_aport_client_init(runner):
@@ -258,7 +275,7 @@ def main():
     
     # Run all tests
     test_functions = [
-        test_mock_verification_result,
+        test_mock_sdk_api_structure,
         test_mock_sdk,
         test_aport_client_init,
         test_aport_client_verify_checkpoint,

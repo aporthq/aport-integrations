@@ -1,19 +1,35 @@
 # LangGraph APort Integration
 
-A comprehensive integration that adds APort agent verification to LangGraph state machine checkpoints, enabling secure and policy-driven state transitions in AI agent workflows.
+A comprehensive integration that adds **APort pre-act verification** to LangGraph workflow nodes, enabling secure and policy-driven state transitions in AI agent workflows.
 
 ## Overview
 
-This integration allows you to protect LangGraph state machines with APort's agent identity verification system. It provides checkpoint-level security where each state transition can be verified against policies before execution.
+This integration allows you to protect LangGraph workflow nodes with APort's agent identity verification system. It provides **node-level security** where each node execution can be verified against policies before running.
+
+### What This Is
+
+- **Pre-act verification guards** for LangGraph nodes
+- **Policy-based authorization** before node execution
+- **Runtime checks** using APort agent verification
+- **Node-level security** for AI agent workflows
+- **Node authorization** system for state machine protection
+
+### What This Is NOT
+
+- Not a LangGraph checkpoint saver implementation (BaseCheckpointSaver)
+- Not a persistence layer for state storage
+- Not related to LangGraph's built-in checkpoint system
+
+The term "checkpoint" in this integration refers to **verification points** where policy checks occur before node execution, implementing **node authorization** patterns.
 
 ### Key Features
 
-- **Checkpoint Protection**: Verify agent permissions before state transitions
-- **Policy-Based Control**: Different policies for different workflow stages
-- **Real-time Verification**: Sub-100ms verification checks
+- **Node Protection**: Verify agent permissions before node execution
+- **Real Policy Support**: Uses actual APort policies like `payments.refund.v1`, `data.export.v1`
+- **Real-time Verification**: Sub-100ms verification checks with proper API structure
 - **Error Handling**: Graceful degradation and fallback strategies
 - **Audit Trail**: Comprehensive logging of verification events
-- **Retry Logic**: Built-in retry mechanisms for transient failures
+- **Production Ready**: Both mock (development) and real (production) implementations
 
 ## Quick Start
 
@@ -43,23 +59,42 @@ from langgraph.graph import StateGraph
 # Initialize the guard
 guard = APortCheckpointGuard(
     api_key="your_aport_api_key",
-    default_policy="workflow.basic.v1"
+    default_policy="payments.refund.v1"  # Real APort policy
 )
 
-# Create a protected node
-@guard.require_verification(policy="data.process.v1")
-async def process_data(state, config=None):
-    # Your node logic here
-    return {"processed": True}
+# Create a protected node for refund processing
+@guard.require_verification(policy="payments.refund.v1")
+async def process_refund(state, config=None):
+    # Your refund processing logic here
+    return {
+        "refund_processed": True,
+        "amount": state.get("amount"),
+        "currency": state.get("currency", "USD")
+    }
+
+# Create a protected node for data export
+@guard.require_verification(policy="data.export.v1")
+async def export_data(state, config=None):
+    # Your data export logic here
+    return {
+        "export_completed": True,
+        "record_count": state.get("record_count", 0)
+    }
 
 # Create your workflow
 workflow = StateGraph(YourStateSchema)
-workflow.add_node("process", process_data)
-workflow.set_entry_point("process")
+workflow.add_node("refund", process_refund)
+workflow.add_node("export", export_data)
+workflow.set_entry_point("refund")
 
-# Compile and run
+# Compile and run with proper context
 app = workflow.compile()
-result = await app.ainvoke({"agent_id": "agt_user_123", "data": "..."})
+result = await app.ainvoke({
+    "agent_id": "agt_user_123", 
+    "amount": 100.50,
+    "currency": "USD",
+    "record_count": 1500
+})
 ```
 
 ## API Reference
@@ -242,6 +277,70 @@ See [`workflows/error_handling.py`](workflows/error_handling.py) for error handl
 python workflows/error_handling.py
 ```
 
+## Production Deployment
+
+### Prerequisites
+
+Before deploying to production, ensure you have:
+
+1. **Real APort API Access**: Valid API key and access to APort services
+2. **Policy Configuration**: Actual policies configured in your APort dashboard
+3. **Dependencies**: Install production HTTP client
+
+```bash
+# Install production dependencies
+pip install aiohttp>=3.9.0
+```
+
+### Production Configuration
+
+```python
+# Production setup with real APort client
+guard = APortCheckpointGuard(
+    api_key="your_production_aport_api_key",
+    base_url="https://api.aport.io",
+    use_mock=False,  # Use real APort API
+    strict_mode=True  # Fail on verification errors
+)
+```
+
+### API Structure
+
+The integration uses the real APort API structure:
+
+- **Endpoint**: `POST /api/verify/policy/{policy_id}`
+- **Method**: `verify_policy(agent_id, policy_id, context)`
+- **Response**: `{"decision": {"allow": bool, "decision_id": str}, "verified": bool}`
+
+### Real Policy Examples
+
+```python
+# Use actual APort policies
+policies = {
+    "payments.refund.v1": {"amount": 75.50, "currency": "USD"},
+    "data.export.v1": {"data_type": "user_data", "record_count": 150},
+    "messaging.v1": {"message_sent": True},
+    "admin.access.v1": {"operation": "admin_access", "security_level": "high"}
+}
+```
+
+### Monitoring and Logging
+
+Enable comprehensive logging for production:
+
+```python
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Guard will automatically log verification events
+guard = APortCheckpointGuard(
+    api_key="your_api_key",
+    use_mock=False
+)
+```
+
 ## Testing
 
 Run the comprehensive test suite:
@@ -323,13 +422,15 @@ def extract_agent_id(state):
 
 ### 2. Policy Naming
 
-Use hierarchical policy naming:
+Use standard APort policy identifiers:
 
 ```python
-"workflow.customer_service.view.v1"      # View customer data
-"workflow.customer_service.update.v1"    # Update customer data  
-"workflow.customer_service.refund.v1"    # Process refunds
-"system.admin.user_management.v1"        # Admin operations
+"payments.refund.v1"        # Refund processing
+"payments.charge.v1"        # Payment processing  
+"data.export.v1"           # Data export operations
+"messaging.v1"             # Messaging and notifications
+"admin.access.v1"          # Administrative access
+"repo.v1"                  # Repository operations
 ```
 
 ### 3. Context Enrichment

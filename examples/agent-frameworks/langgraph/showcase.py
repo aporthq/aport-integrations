@@ -33,10 +33,10 @@ async def run_showcase():
     print("LangGraph APort Integration Showcase")
     print("=" * 50)
     
-    # Initialize the guard
+    # Initialize guard with real policy
     guard = APortCheckpointGuard(
         api_key="showcase_api_key",
-        default_policy="showcase.workflow.v1",
+        default_policy="payments.refund.v1",  # Real policy
         strict_mode=True,
         use_mock=True
     )
@@ -70,18 +70,25 @@ async def showcase_basic_verification(guard):
     print("\nShowcase 1: Basic Verification")
     print("-" * 30)
     
-    # Create a simple protected function
-    @guard.require_verification(policy="showcase.basic.v1")
+    # Create a simple protected function for data export
+    @guard.require_verification(policy="data.export.v1")
     async def protected_operation(state, config=None):
         return {
-            "operation": "basic_operation",
-            "result": f"Processed data for {state.get('agent_id')}",
+            "operation": "data_export",
+            "result": f"Exported data for {state.get('agent_id')}",
+            "data_type": state.get("data_type", "user_data"),
+            "record_count": state.get("record_count", 100),
             "timestamp": datetime.now().isoformat()
         }
     
     # Test with authorized agent
     print("Testing with authorized agent...")
-    state = {"agent_id": "agt_authorized_user", "data": "sample_data"}
+    state = {
+        "agent_id": "agt_authorized_user", 
+        "data_type": "user_data",
+        "record_count": 150,
+        "export_format": "csv"
+    }
     
     try:
         result = await protected_operation(state)
@@ -108,41 +115,46 @@ async def showcase_state_machine_workflow(guard):
     print("\nShowcase 2: State Machine Workflow")
     print("-" * 35)
     
-    # Create workflow nodes
-    @guard.require_verification(policy="demo.validate.v1")
+    # Create workflow nodes with real policies
+    @guard.require_verification(policy="data.export.v1")
     async def validate_input(state, config=None):
-        print("   -> Validating input...")
+        print("   -> Validating export request...")
         return {
             "status": "validated",
+            "export_type": state.get("data_type", "user_data"),
             "validation_timestamp": datetime.now().isoformat(),
             "next_stage": "process"
         }
     
-    @guard.require_verification(policy="demo.process.v1")
+    @guard.require_verification(policy="payments.refund.v1")
     async def process_data(state, config=None):
-        print("   -> Processing data...")
+        print("   -> Processing refund request...")
         await asyncio.sleep(0.2)  # Simulate processing
         return {
             "status": "processed",
-            "processing_result": f"Processed {state.get('data_type', 'unknown')}",
+            "processing_result": f"Processed refund for amount: ${state.get('amount', 100)}",
+            "currency": state.get("currency", "USD"),
             "next_stage": "finalize"
         }
     
-    @guard.require_verification(policy="demo.finalize.v1")
+    @guard.require_verification(policy="messaging.v1")
     async def finalize_workflow(state, config=None):
-        print("   -> Finalizing workflow...")
+        print("   -> Sending notification...")
         return {
             "status": "completed",
-            "final_result": "Workflow completed successfully",
+            "final_result": "Workflow completed and notification sent",
+            "message_sent": True,
             "completion_timestamp": datetime.now().isoformat()
         }
     
-    # Execute workflow
-    print("-> Executing workflow for authorized agent...")
+    # Execute multi-policy workflow
+    print("-> Executing multi-policy workflow for authorized agent...")
     workflow_state = {
         "agent_id": "agt_workflow_user",
         "workflow_id": "wf_showcase_001",
         "data_type": "customer_data",
+        "amount": 75.50,
+        "currency": "USD",
         "status": "pending"
     }
     
@@ -175,28 +187,28 @@ async def showcase_error_handling(guard):
     
     # Create guard with graceful degradation
     graceful_guard = APortCheckpointGuard(
-        api_key="demo_api_key",
-        default_policy="demo.graceful.v1",
+        api_key="showcase_api_key",
+        default_policy="admin.access.v1",  # Real admin policy
         strict_mode=False,  # Allow graceful degradation
         use_mock=True
     )
     
-    @graceful_guard.require_verification(policy="demo.resilient.v1")
+    @graceful_guard.require_verification(policy="admin.access.v1")
     async def resilient_operation(state, config=None):
         verification_error = state.get("_aport_verification_error")
         
         if verification_error:
             print("   Warning: Using fallback mode due to verification failure")
             return {
-                "operation": "fallback_operation",
-                "result": "Limited functionality - verification failed",
+                "operation": "limited_admin_access",
+                "result": "Limited admin functionality - verification failed",
                 "fallback_used": True
             }
         else:
-            print("   Success: Using full functionality")
+            print("   Success: Using full admin functionality")
             return {
-                "operation": "full_operation",
-                "result": "Full functionality - verification passed",
+                "operation": "full_admin_access", 
+                "result": "Full admin functionality - verification passed",
                 "fallback_used": False
             }
     
@@ -228,41 +240,41 @@ async def showcase_multi_policy_workflow(guard):
     print("\nShowcase 4: Multi-Policy Workflow")
     print("-" * 35)
     
-    # Different security levels
-    @guard.require_verification(policy="demo.public.v1")
+    # Different security levels with real policies
+    @guard.require_verification(policy="data.export.v1")
     async def public_operation(state, config=None):
-        return {"security_level": "public", "result": "Public data accessed"}
+        return {"security_level": "data_export", "result": "Public data exported"}
     
-    @guard.require_verification(policy="demo.internal.v1")
+    @guard.require_verification(policy="payments.refund.v1")
     async def internal_operation(state, config=None):
-        return {"security_level": "internal", "result": "Internal data accessed"}
+        return {"security_level": "payments", "result": "Refund processed"}
     
-    @guard.require_verification(policy="demo.confidential.v1")
+    @guard.require_verification(policy="admin.access.v1")
     async def confidential_operation(state, config=None):
-        return {"security_level": "confidential", "result": "Confidential data accessed"}
+        return {"security_level": "admin", "result": "Admin operation completed"}
     
-    # Test different security levels
+    # Test different security levels with realistic agent roles
     test_scenarios = [
         {
-            "name": "Public Access",
-            "agent_id": "agt_public_user",
+            "name": "Data Export Access",
+            "agent_id": "agt_data_analyst",
             "operation": public_operation,
             "expected_success": True
         },
         {
-            "name": "Internal Access",
-            "agent_id": "agt_internal_user",
+            "name": "Payment Processing",
+            "agent_id": "agt_payment_processor",
             "operation": internal_operation,
             "expected_success": True
         },
         {
-            "name": "Confidential Access (Authorized)",
+            "name": "Admin Access (Authorized)",
             "agent_id": "agt_admin_user",
             "operation": confidential_operation,
             "expected_success": True
         },
         {
-            "name": "Confidential Access (Denied)",
+            "name": "Admin Access (Denied)",
             "agent_id": "agt_user_denied",
             "operation": confidential_operation,
             "expected_success": False
@@ -296,11 +308,11 @@ async def showcase_verification_context():
     
     guard = APortCheckpointGuard(
         api_key="demo_api_key",
-        default_policy="demo.context.v1",
+        default_policy="data.export.v1",  # Real policy
         use_mock=True
     )
     
-    @guard.require_verification(policy="demo.context_rich.v1")
+    @guard.require_verification(policy="data.export.v1")
     async def context_aware_operation(state, config=None):
         # The guard automatically includes context about the operation
         verification_info = state.get("_aport_verification", {})

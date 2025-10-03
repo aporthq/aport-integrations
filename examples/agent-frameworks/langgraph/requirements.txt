@@ -5,6 +5,9 @@ aporthq-sdk-python>=1.0.0
 pydantic>=2.0.0
 typing-extensions>=4.0.0
 
+# HTTP client for real APort API
+aiohttp>=3.9.0
+
 # Development and testing dependencies (optional)
 pytest>=7.0.0
 pytest-asyncio>=0.21.0
