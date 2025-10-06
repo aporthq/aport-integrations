@@ -173,7 +173,7 @@ async function runDataExportPolicyTests() {
     chalk.blue.bold("\n🧪 Running Comprehensive Data Export Policy Tests\n")
   );
 
-  const agentId = "agt_tmpl_mg8jr8l1_geckvz"; // Agent with data.export capability
+  const agentId = "ap_b804b365003247888c06c94347cf54fe"; // Agent with data.export capability
   const policy = "data.export.v1";
 
   let passed = 0;

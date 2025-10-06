@@ -168,7 +168,7 @@ async function runMessagingPolicyTests() {
     chalk.blue.bold("\n🧪 Running Comprehensive Messaging Policy Tests\n")
   );
 
-  const agentId = "ap_128094d3"; // Agent with messaging.send capability
+  const agentId = "ap_a2d10232c6534523812423eec8a1425c"; // Agent with messaging.send capability
   const policy = "messaging.v1";
 
   let passed = 0;
