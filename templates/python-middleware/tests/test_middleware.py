@@ -22,7 +22,7 @@ def app():
     @app.post("/refund")
     async def refund(
         request: Request,
-        aport_data: dict = middleware.require_policy("payments.refund.v1")
+        aport_data: dict = middleware.require_policy("finance.payment.refund.v1")
     ):
         return {"success": True, "agent_id": aport_data["agent_id"]}
     

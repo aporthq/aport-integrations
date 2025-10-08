@@ -20,7 +20,8 @@ app.get("/", (req, res) => {
     version: "1.0.0",
     endpoints: {
       "GET /public": "Public endpoint (no verification)",
-      "POST /refund": "Refund endpoint (requires payments.refund.v1 policy)",
+      "POST /refund":
+        "Refund endpoint (requires finance.payment.refund.v1 policy)",
       "GET /admin": "Admin endpoint (requires admin.access policy)",
     },
   });
@@ -37,7 +38,7 @@ app.get("/public", (req, res) => {
 // Refund endpoint (requires verification)
 app.post(
   "/refund",
-  aportMiddleware("payments.refund.v1", {
+  aportMiddleware("finance.payment.refund.v1", {
     context: {
       endpoint: "refund",
       action: "process_refund",

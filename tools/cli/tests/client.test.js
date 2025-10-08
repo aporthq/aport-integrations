@@ -53,9 +53,13 @@ describe("APortClient", () => {
         post: jest.fn().mockResolvedValue(mockResponse),
       });
 
-      const result = await client.verify("payments.refund.v1", "test-agent", {
-        amount: 100,
-      });
+      const result = await client.verify(
+        "finance.payment.refund.v1",
+        "test-agent",
+        {
+          amount: 100,
+        }
+      );
 
       expect(result.verified).toBe(true);
       expect(result.passport.agent_id).toBe("test-agent");
@@ -73,7 +77,7 @@ describe("APortClient", () => {
       });
 
       await expect(
-        client.verify("payments.refund.v1", "invalid-agent")
+        client.verify("finance.payment.refund.v1", "invalid-agent")
       ).rejects.toThrow("API Error: Agent not found");
     });
 
@@ -84,7 +88,7 @@ describe("APortClient", () => {
       });
 
       await expect(
-        client.verify("payments.refund.v1", "test-agent")
+        client.verify("finance.payment.refund.v1", "test-agent")
       ).rejects.toThrow("Network Error: Network Error");
     });
   });

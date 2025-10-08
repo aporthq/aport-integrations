@@ -17,7 +17,7 @@ async function basicExample() {
     // Example 1: Verify a refund bot
     console.log("1. Verifying refund bot...");
     const verifyResult = await client.verify(
-      "payments.refund.v1",
+      "finance.payment.refund.v1",
       "agt_inst_refund_bot_123",
       {
         amount: 50,

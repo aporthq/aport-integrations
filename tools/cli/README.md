@@ -34,10 +34,10 @@ npm start demo
 npm start verify -- --interactive
 
 # Direct verification with real agent IDs - NO API KEY NEEDED!
-npm start verify ap_a2d10232c6534523812423eec8a1425c payments.refund.v1 '{"amount":50}'
+npm start verify ap_a2d10232c6534523812423eec8a1425c finance.payment.refund.v1 '{"amount":50}'
 
 # Or using options
-npm start verify -a ap_a2d10232c6534523812423eec8a1425c -p payments.refund.v1 -c '{"amount":50}'
+npm start verify -a ap_a2d10232c6534523812423eec8a1425c -p finance.payment.refund.v1 -c '{"amount":50}'
 
 # Get passport information - NO API KEY NEEDED!
 npm start get-passport -- --interactive
@@ -55,10 +55,10 @@ npm start create-passport -- --interactive
 aport verify --interactive
 
 # Direct mode (positional arguments)
-aport verify agt_inst_refund_bot_123 payments.refund.v1 '{"amount":50}'
+aport verify agt_inst_refund_bot_123 finance.payment.refund.v1 '{"amount":50}'
 
 # Direct mode (options)
-aport verify -a agt_inst_refund_bot_123 -p payments.refund.v1 -c '{"amount":50}'
+aport verify -a agt_inst_refund_bot_123 -p finance.payment.refund.v1 -c '{"amount":50}'
 ```
 
 ### `policy` - Verify against specific policy pack
@@ -113,9 +113,9 @@ The CLI includes pre-configured sample agent IDs for testing:
 
 Test against these policy packs:
 
-- `payments.refund.v1` - Refund processing policies
+- `finance.payment.refund.v1` - Refund processing policies
 - `data.export.v1` - Data export policies  
-- `repo.v1` - Repository operation policies
+- `code.repository.merge.v1` - Repository operation policies
 - `admin.access.v1` - Admin access policies
 
 ## 🔧 Configuration
@@ -158,7 +158,7 @@ npm start demo
 ### Example 1: Verify Refund Bot
 
 ```bash
-aport verify -a agt_inst_refund_bot_123 -p payments.refund.v1 -c '{"amount":50,"currency":"USD"}'
+aport verify -a agt_inst_refund_bot_123 -p finance.payment.refund.v1 -c '{"amount":50,"currency":"USD"}'
 ```
 
 ### Example 2: Create Test Passport

@@ -33,12 +33,16 @@ describe("APort Express Middleware", () => {
       res.json({ message: "public" });
     });
 
-    app.post("/refund", aportMiddleware("payments.refund.v1"), (req, res) => {
-      res.json({
-        success: true,
-        agentId: req.aport.agentId,
-      });
-    });
+    app.post(
+      "/refund",
+      aportMiddleware("finance.payment.refund.v1"),
+      (req, res) => {
+        res.json({
+          success: true,
+          agentId: req.aport.agentId,
+        });
+      }
+    );
   });
 
   afterEach(() => {
@@ -74,7 +78,7 @@ describe("APort Express Middleware", () => {
       expect(response.body.success).toBe(true);
       expect(response.body.agentId).toBe("agt_test123");
       expect(mockClient.verify).toHaveBeenCalledWith(
-        "payments.refund.v1",
+        "finance.payment.refund.v1",
         "agt_test123",
         expect.any(Object)
       );
@@ -132,7 +136,7 @@ describe("APort Express Middleware", () => {
         .expect(200);
 
       expect(mockClient.verify).toHaveBeenCalledWith(
-        "payments.refund.v1",
+        "finance.payment.refund.v1",
         "agt_header123",
         expect.any(Object)
       );
@@ -150,7 +154,7 @@ describe("APort Express Middleware", () => {
         .expect(200);
 
       expect(mockClient.verify).toHaveBeenCalledWith(
-        "payments.refund.v1",
+        "finance.payment.refund.v1",
         "agt_query123",
         expect.any(Object)
       );
@@ -171,7 +175,7 @@ describe("APort Express Middleware", () => {
         .expect(200);
 
       expect(mockClient.verify).toHaveBeenCalledWith(
-        "payments.refund.v1",
+        "finance.payment.refund.v1",
         "agt_body123",
         expect.any(Object)
       );

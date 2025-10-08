@@ -426,11 +426,11 @@ describe('APortIntegration', () => {
       });
       
       // Act
-      const result = await integration.verify('payments.refund.v1', 'agt_123');
+      const result = await integration.verify('finance.payment.refund.v1', 'agt_123');
       
       // Assert
       expect(result.verified).toBe(true);
-      expect(mockAPortAPI.verify).toHaveBeenCalledWith('payments.refund.v1', 'agt_123');
+      expect(mockAPortAPI.verify).toHaveBeenCalledWith('finance.payment.refund.v1', 'agt_123');
     });
     
     it('should handle verification failure', async () => {
@@ -438,7 +438,7 @@ describe('APortIntegration', () => {
       mockAPortAPI.verify.mockRejectedValue(new Error('Verification failed'));
       
       // Act & Assert
-      await expect(integration.verify('payments.refund.v1', 'agt_123'))
+      await expect(integration.verify('finance.payment.refund.v1', 'agt_123'))
         .rejects.toThrow('Verification failed');
     });
   });
@@ -461,7 +461,7 @@ describe('APortIntegration', () => {
 ```javascript
 /**
  * Verifies an agent against a policy pack
- * @param {string} policy - Policy pack identifier (e.g., 'payments.refund.v1')
+ * @param {string} policy - Policy pack identifier (e.g., 'finance.payment.refund.v1')
  * @param {string} agentId - Agent identifier (e.g., 'agt_inst_xyz789')
  * @param {Object} context - Additional context for verification
  * @param {string} context.userId - User ID for user-specific policies
@@ -469,7 +469,7 @@ describe('APortIntegration', () => {
  * @returns {Promise<VerificationResult>} Verification result
  * @throws {APortError} If verification fails
  * @example
- * const result = await integration.verify('payments.refund.v1', 'agt_123', {
+ * const result = await integration.verify('finance.payment.refund.v1', 'agt_123', {
  *   userId: 'user_456',
  *   metadata: { amount: 100 }
  * });

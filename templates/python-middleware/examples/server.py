@@ -41,7 +41,7 @@ async def root():
         "version": "1.0.0",
         "endpoints": {
             "GET /public": "Public endpoint (no verification)",
-            "POST /refund": "Refund endpoint (requires payments.refund.v1 policy)",
+            "POST /refund": "Refund endpoint (requires finance.payment.refund.v1 policy)",
             "GET /admin": "Admin endpoint (requires admin.access policy)"
         }
     }
@@ -59,7 +59,7 @@ async def process_refund(
     request: RefundRequest,
     aport_data: Dict[str, Any] = Depends(
         aport_middleware.require_policy(
-            "payments.refund.v1",
+            "finance.payment.refund.v1",
             context={"endpoint": "refund", "action": "process_refund"}
         )
     )

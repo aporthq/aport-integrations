@@ -263,11 +263,11 @@ describe('APortIntegration', () => {
       });
       
       // Act
-      const result = await integration.verify('payments.refund.v1', 'agt_123');
+      const result = await integration.verify('finance.payment.refund.v1', 'agt_123');
       
       // Assert
       expect(result.verified).toBe(true);
-      expect(mockAPortAPI.verify).toHaveBeenCalledWith('payments.refund.v1', 'agt_123');
+      expect(mockAPortAPI.verify).toHaveBeenCalledWith('finance.payment.refund.v1', 'agt_123');
     });
     
     it('should handle verification failure', async () => {
@@ -275,7 +275,7 @@ describe('APortIntegration', () => {
       mockAPortAPI.verify.mockRejectedValue(new Error('Verification failed'));
       
       // Act & Assert
-      await expect(integration.verify('payments.refund.v1', 'agt_123'))
+      await expect(integration.verify('finance.payment.refund.v1', 'agt_123'))
         .rejects.toThrow('Verification failed');
     });
   });

@@ -266,7 +266,7 @@ const aportMiddleware = createAPortMiddleware({
 });
 
 app.post("/api/refunds", 
-  aportMiddleware("payments.refund.v1"),
+  aportMiddleware("finance.payment.refund.v1"),
   async (req, res) => {
     // Policy already verified! Check specific limits
     const passport = req.aport.passport;
@@ -326,7 +326,7 @@ protected_refund_tool = APortToolGuard(
         description="Process customer refunds",
         func=refund_tool
     ),
-    policy_pack="payments.refund.v1",
+    policy_pack="finance.payment.refund.v1",
     agent_id="agt_inst_xyz789"
 )
 
@@ -349,7 +349,7 @@ jobs:
       - uses: aporthq/policy-verify-action@v1
         with:
           agent-id: ${{ secrets.APORT_AGENT_ID }}
-          policy-pack: 'repo.v1'
+          policy-pack: 'code.repository.merge.v1'
           context: |
             {
               "repo": "${{ github.repository }}",
