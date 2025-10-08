@@ -16,9 +16,9 @@ async function advancedExample() {
     // Example 1: Batch verification with different policies
     console.log("1. Batch verification with multiple policies...");
     const policies = [
-      { policy: "payments.refund.v1", context: { amount: 50 } },
+      { policy: "finance.payment.refund.v1", context: { amount: 50 } },
       { policy: "data.export.v1", context: { rows: 1000 } },
-      { policy: "repo.v1", context: { action: "merge" } },
+      { policy: "code.repository.merge.v1", context: { action: "merge" } },
     ];
 
     const agentId = "agt_inst_refund_bot_123";
@@ -65,9 +65,13 @@ async function advancedExample() {
       }
     };
 
-    const retryResult = await retryVerify("payments.refund.v1", agentId, {
-      amount: 100,
-    });
+    const retryResult = await retryVerify(
+      "finance.payment.refund.v1",
+      agentId,
+      {
+        amount: 100,
+      }
+    );
     console.log(
       `Retry result: ${retryResult.success ? "✅" : "❌"} (${
         retryResult.attempts
@@ -110,7 +114,7 @@ async function advancedExample() {
 
     // Verify the new passport
     const verifyNewPassport = await client.verify(
-      "payments.refund.v1",
+      "finance.payment.refund.v1",
       createdPassport.agent_id,
       {
         amount: 150,
@@ -142,7 +146,9 @@ async function advancedExample() {
       console.log(`Available policy packs: ${policyPacks.length}`);
 
       // Get details for a specific policy pack
-      const refundPolicy = await client.getPolicyPack("payments.refund.v1");
+      const refundPolicy = await client.getPolicyPack(
+        "finance.payment.refund.v1"
+      );
       console.log(`Refund policy: ${refundPolicy.name || "Unknown"}`);
       console.log(
         `Description: ${refundPolicy.description || "No description"}`

@@ -3,7 +3,7 @@
 /**
  * Comprehensive Messaging Policy Tests
  *
- * Tests all limits and validation rules defined in messaging.v1 policy:
+ * Tests all limits and validation rules defined in messaging.message.send.v1 policy:
  * - Message length limits (max 2000 characters)
  * - Required fields validation
  * - Message type validation
@@ -169,7 +169,7 @@ async function runMessagingPolicyTests() {
   );
 
   const agentId = "ap_a2d10232c6534523812423eec8a1425c"; // Agent with messaging.send capability
-  const policy = "messaging.v1";
+  const policy = "messaging.message.send.v1";
 
   let passed = 0;
   let failed = 0;

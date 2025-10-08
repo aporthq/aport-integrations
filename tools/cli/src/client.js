@@ -114,7 +114,7 @@ class APortClient {
     try {
       const response = await this.client.get(`/api/verify/${agentId}`, {
         params: {
-          policy_pack: "repo.v1", // Use a basic policy for passport retrieval
+          policy_pack: "code.repository.merge.v1", // Use a basic policy for passport retrieval
           context: JSON.stringify({}),
         },
       });

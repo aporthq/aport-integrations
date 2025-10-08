@@ -61,9 +61,9 @@ program
             name: "policy",
             message: "Select a policy pack:",
             choices: [
-              "payments.refund.v1",
+              "finance.payment.refund.v1",
               "data.export.v1",
-              "repo.v1",
+              "code.repository.merge.v1",
               "admin.access.v1",
             ],
           },
@@ -372,11 +372,13 @@ program
 
     // Demo 1: Verify refund bot
     console.log(
-      chalk.yellow("1. Verifying refund bot against payments.refund.v1 policy")
+      chalk.yellow(
+        "1. Verifying refund bot against finance.payment.refund.v1 policy"
+      )
     );
     try {
       const result1 = await client.verify(
-        "payments.refund.v1",
+        "finance.payment.refund.v1",
         SAMPLE_AGENTS["refund-bot"],
         {
           amount: 50,
@@ -449,14 +451,16 @@ program
     });
 
     console.log(chalk.yellow("\nPolicy Packs:"));
-    console.log("  payments.refund.v1    # Refund processing");
+    console.log("  finance.payment.refund.v1    # Refund processing");
     console.log("  data.export.v1        # Data export");
-    console.log("  repo.v1               # Repository operations");
+    console.log(
+      "  code.repository.merge.v1               # Repository operations"
+    );
     console.log("  admin.access.v1       # Admin access\n");
 
     console.log(chalk.yellow("Examples (No API Key Needed!):"));
     console.log(
-      "  aport verify -a ap_a2d10232c6534523812423eec8a1425c -p payments.refund.v1 -c '{\"amount\":50}'"
+      "  aport verify -a ap_a2d10232c6534523812423eec8a1425c -p finance.payment.refund.v1 -c '{\"amount\":50}'"
     );
     console.log(
       "  aport policy -a ap_b804b365003247888c06c94347cf54fe -p data.export.v1 -c '{\"rows\":1000}'"

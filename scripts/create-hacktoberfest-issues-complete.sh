@@ -267,7 +267,7 @@ create_issue_interactive \
     "Complete production-ready Shopify app using APort to verify refund requests via webhooks.
 
 ## Success Criteria
-- Deployable app in /examples/shopify-guardrail using payments.refund.v1 policy
+- Deployable app in /examples/shopify-guardrail using finance.payment.refund.v1 policy
 - Complete Shopify app with APort verification
 - Refund processing with policy checks
 - Comprehensive tests and documentation

@@ -40,7 +40,7 @@ const aportMiddleware = createAPortMiddleware({
 
 // Protect a route
 app.post('/refund', 
-  aportMiddleware('payments.refund.v1'),
+  aportMiddleware('finance.payment.refund.v1'),
   (req, res) => {
     // Agent is verified, access passport data
     const { passport, agentId } = req.aport;
@@ -103,7 +103,7 @@ The middleware looks for agent IDs in the following order:
 
 ```javascript
 app.post('/refund', 
-  aportMiddleware('payments.refund.v1'),
+  aportMiddleware('finance.payment.refund.v1'),
   (req, res) => {
     const { passport } = req.aport;
     

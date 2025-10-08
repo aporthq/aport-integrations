@@ -42,7 +42,7 @@ aport_middleware = APortMiddleware(
 async def process_refund(
     request: Request,
     aport_data: dict = Depends(
-        aport_middleware.require_policy("payments.refund.v1")
+        aport_middleware.require_policy("finance.payment.refund.v1")
     )
 ):
     # Agent is verified, access passport data
@@ -120,7 +120,7 @@ The middleware looks for agent IDs in the following order:
 async def process_refund(
     request: Request,
     aport_data: dict = Depends(
-        aport_middleware.require_policy("payments.refund.v1")
+        aport_middleware.require_policy("finance.payment.refund.v1")
     )
 ):
     passport = aport_data["passport"]
