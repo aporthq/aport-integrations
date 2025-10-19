@@ -1,6 +1,6 @@
 # APort Go Hello World
 
-A minimal, single-file Go script that demonstrates both basic agent passport viewing and policy verification with the APort API. This example helps Go developers get started with APort in seconds using only the Go standard library.
+A minimal, single-file Go script that demonstrates fetching an agent's public passport from the APort `/verify` endpoint. This example helps Go developers get started with APort in seconds using only the Go standard library.
 
 ## Quick Start
 
@@ -26,7 +26,7 @@ examples/hello-world/go/
 git clone https://github.com/aporthq/aport-integrations.git
 cd aport-integrations/examples/hello-world/go
 
-# Run with default settings
+# Run with default settings (no API key required!)
 go run main.go
 
 # Or build and run
@@ -40,11 +40,9 @@ go build -o aport-hello main.go
 APort Go Hello World Example
 ==============================
 
-Base URL: https://aport.io
-Agent ID: ap_128094d3
-Policy: payments.refund.v1
+Fetching agent passport for: ap_128094d3
+From: https://aport.io
 
-=== Example 1: Agent Passport (Hello World) ===
 Agent Passport:
 ===============
 Agent ID:    ap_128094d3
@@ -66,18 +64,6 @@ Limits:
   Allow PII:       false
 
 Success! Agent passport retrieved.
-
-=== Example 2: Policy Verification (Advanced) ===
-Policy Verification Result:
-   Agent ID: ap_128094d3
-   Policy: payments.refund.v1
-   Decision ID: dec_abc123xyz
-   Status: DENIED
-   Expires In: 60 seconds
-   Reasons:
-     - Passport with the specified agent ID was not found
-
-Policy verification failed.
 ```
 
 ## Configuration
@@ -87,23 +73,19 @@ The script can be configured using environment variables:
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `APORT_BASE_URL` | APort API base URL | `https://aport.io` |
-| `APORT_AGENT_ID` | Agent ID to verify | `ap_128094d3` (sample refund bot) |
-| `APORT_POLICY` | Policy pack to verify against | `payments.refund.v1` |
+| `APORT_AGENT_ID` | Agent ID to view | `ap_128094d3` (sample refund bot) |
 
 ### Custom Configuration Examples
 
 ```bash
 # Test with a different agent
-APORT_AGENT_ID=agt_tmpl_mg8jr8l1_geckvz APORT_POLICY=data.export.v1 go run main.go
-
-# Test with PR merger agent
-APORT_AGENT_ID=agt_tmpl_mg8jtzzk_rl0diw APORT_POLICY=repo.v1 go run main.go
+APORT_AGENT_ID=agt_tmpl_mg8jr8l1_geckvz go run main.go
 
 # Use a different APort instance
 APORT_BASE_URL=https://api.aport.io go run main.go
 ```
 
-## Sample Agents & Policies
+## Sample Agents
 
 The script includes several sample agents for testing:
 
@@ -112,21 +94,14 @@ The script includes several sample agents for testing:
 - **Data Exporter**: `agt_tmpl_mg8jr8l1_geckvz` - For data export operations  
 - **PR Merger**: `agt_tmpl_mg8jtzzk_rl0diw` - For repository operations
 
-### Sample Policies
-- **`payments.refund.v1`** - Payment refund policy
-- **`data.export.v1`** - Data export policy
-- **`repo.v1`** - Repository operations policy
-- **`admin.access.v1`** - Administrative access policy
-
 ## How It Works
 
-This example demonstrates two different APort API endpoints:
+This example demonstrates the simplest possible APort integration:
 
-### Example 1: Agent Passport (Hello World)
-**Purpose**: View an agent's public passport/profile  
-**Endpoint**: `GET /api/verify/{agent_id}`  
-**Authentication**: None required (public endpoint)  
-**Use Case**: "Does this agent exist? What can it do?"
+1. **Simple GET Request**: Makes a GET request to `/api/verify/{agent_id}`
+2. **No Authentication**: No API key required (public endpoint)
+3. **No Request Body**: GET request with no body needed
+4. **Agent Passport Response**: Returns the agent's public passport/profile
 
 ```bash
 # Simple GET request
@@ -135,58 +110,29 @@ curl https://aport.io/api/verify/ap_128094d3
 
 **Response**: Agent profile with capabilities, limits, verification status
 
-### Example 2: Policy Verification (Advanced)
-**Purpose**: Check if an agent is authorized to perform a specific action  
-**Endpoint**: `POST /api/verify/policy/{policy_id}`  
-**Authentication**: None required for demo  
-**Use Case**: "Can this agent process a $100 refund?"
+## What This Does
 
-```json
-{
-  "context": {
-    "agent_id": "ap_128094d3",
-    "policy_id": "payments.refund.v1",
-    "context": {
-      "amount": 50,
-      "currency": "USD",
-      "order_id": "order_12345",
-      "customer_id": "cust_67890",
-      "reason_code": "customer_request",
-      "idempotency_key": "refund_12345"
-    }
-  }
-}
-```
+This example demonstrates the simplest possible APort integration:
 
-**Response**: Decision (allow/deny) with reasons and expiration
+- Makes a GET request to `/api/verify/{agent_id}`
+- No authentication required (public endpoint)
+- No request body needed
+- Returns the agent's public passport/profile
 
-## Important Notes
-
-### Agent Availability
-The sample agent IDs (`ap_128094d3`, `agt_tmpl_mg8jr8l1_geckvz`, `agt_tmpl_mg8jtzzk_rl0diw`) are provided as examples but may not be available in the APort registry. You may see errors like:
-
-- `agent_not_indexed` - Agent not found in registry
-- `passport_not_found` - Agent passport not available
-
-This is expected behavior for demo purposes. In production, you would use real agent IDs from your APort account.
-
-### Policy Context
-The script automatically generates appropriate context fields based on the policy type:
-- **payments.refund.v1**: Includes amount, currency, order_id, customer_id, etc.
-- **data.export.v1**: Includes export_type, format, filters
-- **repo.v1**: Includes action, repository, branch
+This is different from policy verification which requires:
+- API key authentication
+- POST request with context
+- Policy evaluation logic
 
 ## Code Structure
 
 The script is organized into several key components:
 
-- **Data Structures**: Go structs for both agent passport and policy verification responses
-- **Dual Endpoints**: Implements both GET (agent passport) and POST (policy verification) 
+- **Data Structures**: Go structs that mirror the APort agent passport response format
 - **HTTP Client**: Uses `net/http` standard library for API calls
-- **JSON Handling**: Uses `encoding/json` for request/response serialization
+- **JSON Handling**: Uses `encoding/json` for response parsing
 - **Error Handling**: Comprehensive error checking with descriptive messages
 - **Configuration**: Environment variable support with sensible defaults
-- **Policy Context**: Smart context generation based on policy type
 
 ## Customization
 
@@ -205,42 +151,17 @@ APORT_AGENT_ID=agt_tmpl_mg8jr8l1_geckvz go run main.go
 APORT_AGENT_ID=agt_tmpl_mg8jtzzk_rl0diw go run main.go
 ```
 
-### Different Policies
-
-Change the policy to test different verification scenarios:
-
-```bash
-# Payment refund policy
-APORT_POLICY=payments.refund.v1 go run main.go
-
-# Data export policy
-APORT_POLICY=data.export.v1 go run main.go
-
-# Repository operations policy
-APORT_POLICY=repo.v1 go run main.go
-```
-
-### Custom Policy Context
-
-The script automatically generates appropriate context based on the policy type. You can modify the `getPolicyContext()` function to add custom fields:
-
-```go
-case "payments.refund.v1":
-    return map[string]interface{}{
-        "amount":         100,  // Custom amount
-        "currency":       "EUR", // Custom currency
-        "order_id":       "order_12345",
-        "customer_id":    "cust_67890",
-        "reason_code":    "customer_request",
-        "idempotency_key": "refund_12345",
-    }
-```
-
 ### Custom Headers
 
-Add authentication or other headers:
+Add authentication or other headers by modifying the `getAgentPassport` function:
 
 ```go
+req, err := http.NewRequest("GET", url, nil)
+if err != nil {
+    return nil, fmt.Errorf("failed to create request: %w", err)
+}
+
+// Add custom headers
 req.Header.Set("Authorization", "Bearer your-api-key")
 req.Header.Set("X-Custom-Header", "custom-value")
 ```
@@ -252,7 +173,24 @@ The script handles various error scenarios:
 - **Network errors**: Connection failures, timeouts
 - **HTTP errors**: 4xx/5xx status codes with response body
 - **JSON parsing errors**: Malformed response data
-- **Missing decision data**: Graceful handling of unexpected response structure
+- **Agent not found**: Graceful handling when agent doesn't exist
+
+## Important Notes
+
+### Agent Availability
+The sample agent IDs (`ap_128094d3`, `agt_tmpl_mg8jr8l1_geckvz`, `agt_tmpl_mg8jtzzk_rl0diw`) are provided as examples but may not be available in the APort registry. You may see errors like:
+
+- `agent_not_indexed` - Agent not found in registry
+- `invalid_agent_id` - Agent ID format is incorrect
+
+This is expected behavior for demo purposes. In production, you would use real agent IDs from your APort account.
+
+### Agent ID Format
+Agent IDs must follow the pattern: `ap_[a-zA-Z0-9]+`
+
+Examples:
+- ✅ `ap_128094d3` - Valid format
+- ❌ `agt_tmpl_mg8jr8l1_geckvz` - Invalid format (should start with `ap_`)
 
 ## Next Steps
 
@@ -261,7 +199,7 @@ After running this hello world example:
 1. **Explore the [APort Documentation](https://aport.io/docs)** for comprehensive guides
 2. **Check out [APort SDKs](https://github.com/aporthq/aport-sdks)** for production-ready Go SDK
 3. **Browse [Integration Examples](https://github.com/aporthq/aport-integrations)** for real-world use cases
-4. **Join the [APort Discord](https://discord.gg/aport)** for community support
+4. **Learn about Policy Verification**: For authorizing actions, see policy verification examples
 
 ## Contributing
 
