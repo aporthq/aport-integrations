@@ -1,6 +1,6 @@
 # APort Go Hello World
 
-A minimal, single-file Go script that demonstrates a basic call to the APort `/verify` endpoint. This example helps Go developers get started with APort in seconds using only the Go standard library.
+A minimal, single-file Go script that demonstrates both basic agent passport viewing and policy verification with the APort API. This example helps Go developers get started with APort in seconds using only the Go standard library.
 
 ## Quick Start
 
@@ -39,21 +39,45 @@ go build -o aport-hello main.go
 ```
 APort Go Hello World Example
 ==============================
+
 Base URL: https://aport.io
 Agent ID: ap_128094d3
 Policy: payments.refund.v1
 
-Verification Result:
+=== Example 1: Agent Passport (Hello World) ===
+Agent Passport:
+===============
+Agent ID:    ap_128094d3
+Name:        HappyRefundBot Pro
+Role:        Snr. Refund Specialist
+Status:      active
+
+Description:
+  AI-powered refund processing agent with advanced fraud detection
+
+Capabilities:
+  - payments.refund (max_amount: 10000, currency: USD)
+  - inventory.adjust
+  - messaging.send (max_recipients: 10)
+
+Limits:
+  Max actions/min: 60
+  Max export rows: 1000
+  Allow PII:       false
+
+Success! Agent passport retrieved.
+
+=== Example 2: Policy Verification (Advanced) ===
+Policy Verification Result:
    Agent ID: ap_128094d3
    Policy: payments.refund.v1
    Decision ID: dec_abc123xyz
-   Status: ALLOWED
-   Expires In: 3600 seconds
+   Status: DENIED
+   Expires In: 60 seconds
    Reasons:
-     - Agent has valid refund capability
-     - Amount within limits
+     - Passport with the specified agent ID was not found
 
-Success! Agent verification passed.
+Policy verification failed.
 ```
 
 ## Configuration
@@ -96,62 +120,89 @@ The script includes several sample agents for testing:
 
 ## How It Works
 
-1. **Request Structure**: The script creates a POST request to `/api/verify/policy/{policy}` with:
-   ```json
-   {
-     "context": {
-       "agent_id": "ap_128094d3",
-       "policy_id": "payments.refund.v1",
-       "context": {
-         "amount": 50,
-         "currency": "USD",
-         "demo": true
-       }
-     }
-   }
-   ```
+This example demonstrates two different APort API endpoints:
 
-2. **Response Parsing**: Extracts the `allow` status and `reasons` from the JSON response:
-   ```json
-   {
-     "data": {
-       "decision": {
-         "allow": true,
-         "decision_id": "dec_abc123xyz",
-         "expires_in": 3600,
-         "reasons": [
-           {"message": "Agent has valid refund capability"}
-         ]
-       }
-     }
-   }
-   ```
+### Example 1: Agent Passport (Hello World)
+**Purpose**: View an agent's public passport/profile  
+**Endpoint**: `GET /api/verify/{agent_id}`  
+**Authentication**: None required (public endpoint)  
+**Use Case**: "Does this agent exist? What can it do?"
 
-3. **Result Display**: Shows verification status, decision details, and any reasons.
+```bash
+# Simple GET request
+curl https://aport.io/api/verify/ap_128094d3
+```
+
+**Response**: Agent profile with capabilities, limits, verification status
+
+### Example 2: Policy Verification (Advanced)
+**Purpose**: Check if an agent is authorized to perform a specific action  
+**Endpoint**: `POST /api/verify/policy/{policy_id}`  
+**Authentication**: None required for demo  
+**Use Case**: "Can this agent process a $100 refund?"
+
+```json
+{
+  "context": {
+    "agent_id": "ap_128094d3",
+    "policy_id": "payments.refund.v1",
+    "context": {
+      "amount": 50,
+      "currency": "USD",
+      "order_id": "order_12345",
+      "customer_id": "cust_67890",
+      "reason_code": "customer_request",
+      "idempotency_key": "refund_12345"
+    }
+  }
+}
+```
+
+**Response**: Decision (allow/deny) with reasons and expiration
+
+## Important Notes
+
+### Agent Availability
+The sample agent IDs (`ap_128094d3`, `agt_tmpl_mg8jr8l1_geckvz`, `agt_tmpl_mg8jtzzk_rl0diw`) are provided as examples but may not be available in the APort registry. You may see errors like:
+
+- `agent_not_indexed` - Agent not found in registry
+- `passport_not_found` - Agent passport not available
+
+This is expected behavior for demo purposes. In production, you would use real agent IDs from your APort account.
+
+### Policy Context
+The script automatically generates appropriate context fields based on the policy type:
+- **payments.refund.v1**: Includes amount, currency, order_id, customer_id, etc.
+- **data.export.v1**: Includes export_type, format, filters
+- **repo.v1**: Includes action, repository, branch
 
 ## Code Structure
 
 The script is organized into several key components:
 
-- **Data Structures**: Go structs that mirror the APort API request/response format
+- **Data Structures**: Go structs for both agent passport and policy verification responses
+- **Dual Endpoints**: Implements both GET (agent passport) and POST (policy verification) 
 - **HTTP Client**: Uses `net/http` standard library for API calls
 - **JSON Handling**: Uses `encoding/json` for request/response serialization
 - **Error Handling**: Comprehensive error checking with descriptive messages
 - **Configuration**: Environment variable support with sensible defaults
+- **Policy Context**: Smart context generation based on policy type
 
 ## Customization
 
-### Adding Custom Context
+### Different Agent IDs
 
-Modify the `Context` field in the verification request:
+Try different sample agents:
 
-```go
-Context: map[string]interface{}{
-    "amount":      100,
-    "currency":    "EUR",
-    "customer_id": "cust_123",
-    "order_id":    "ord_456",
-},
+```bash
+# Refund specialist
+APORT_AGENT_ID=ap_128094d3 go run main.go
+
+# Data export agent  
+APORT_AGENT_ID=agt_tmpl_mg8jr8l1_geckvz go run main.go
+
+# PR merger agent
+APORT_AGENT_ID=agt_tmpl_mg8jtzzk_rl0diw go run main.go
 ```
 
 ### Different Policies
@@ -159,7 +210,30 @@ Context: map[string]interface{}{
 Change the policy to test different verification scenarios:
 
 ```bash
+# Payment refund policy
+APORT_POLICY=payments.refund.v1 go run main.go
+
+# Data export policy
 APORT_POLICY=data.export.v1 go run main.go
+
+# Repository operations policy
+APORT_POLICY=repo.v1 go run main.go
+```
+
+### Custom Policy Context
+
+The script automatically generates appropriate context based on the policy type. You can modify the `getPolicyContext()` function to add custom fields:
+
+```go
+case "payments.refund.v1":
+    return map[string]interface{}{
+        "amount":         100,  // Custom amount
+        "currency":       "EUR", // Custom currency
+        "order_id":       "order_12345",
+        "customer_id":    "cust_67890",
+        "reason_code":    "customer_request",
+        "idempotency_key": "refund_12345",
+    }
 ```
 
 ### Custom Headers
