@@ -1,0 +1,42 @@
+{
+  "name": "n8n-nodes-aport",
+  "version": "0.1.0",
+  "description": "n8n node for APort agent verification and policy compliance",
+  "keywords": [
+    "n8n-community-node-package",
+    "n8n",
+    "aport",
+    "agent",
+    "verification",
+    "policy",
+    "compliance"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/aporthq/aport-integrations",
+  "author": {
+    "name": "APort",
+    "email": "support@aport.io"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aporthq/aport-integrations.git"
+  },
+  "main": "index.js",
+  "files": [
+    "credentials",
+    "nodes"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "credentials/APortApi.credentials.js"
+    ],
+    "nodes": [
+      "nodes/APort/APort.node.js"
+    ]
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "dotenv": "^17.2.3"
+  }
+}

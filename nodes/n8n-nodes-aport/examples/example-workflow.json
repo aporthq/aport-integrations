@@ -1,0 +1,54 @@
+{
+  "name": "APort Verification Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "listPolicyPacks"
+      },
+      "name": "List Available Policies",
+      "type": "n8n-nodes-aport.aport",
+      "position": [250, 300],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "createPassport",
+        "passportData": "{\n  \"name\": \"My Test Agent\",\n  \"role\": \"Data Export Bot\",\n  \"description\": \"Agent for exporting user data\",\n  \"capabilities\": [\n    { \"id\": \"data.export\", \"params\": {} }\n  ],\n  \"limits\": {\n    \"max_rows_per_export\": 10000,\n    \"allow_pii\": false\n  },\n  \"regions\": [\"US\"],\n  \"contact\": \"admin@example.com\",\n  \"controller_type\": \"person\",\n  \"status\": \"active\"\n}"
+      },
+      "name": "Create Agent Passport",
+      "type": "n8n-nodes-aport.aport",
+      "credentials": {
+        "aportApi": {
+          "name": "APort API"
+        }
+      },
+      "position": [450, 300],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "verifyPolicy",
+        "policyId": "data.export.v1",
+        "agentId": "={{$json[\"agent_id\"]}}",
+        "context": "{\n  \"rows\": 1000,\n  \"dataset\": \"users\",\n  \"idempotency_key\": \"{{$json[\\\"request_id\\\"]}}\",\n  \"export_type\": \"csv\"\n}"
+      },
+      "name": "Verify Export Policy",
+      "type": "n8n-nodes-aport.aport",
+      "position": [650, 300],
+      "typeVersion": 1
+    }
+  ],
+  "connections": {
+    "Create Agent Passport": {
+      "main": [
+        [
+          {
+            "node": "Verify Export Policy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
