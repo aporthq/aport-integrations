@@ -1,0 +1,19 @@
+{
+  "name": "create-aport-integration",
+  "version": "1.0.0",
+  "description": "CLI to scaffold APort integrations",
+  "main": "bin/create.js",
+  "bin": {
+    "create-aport-integration": "./bin/create.js"
+  },
+  "scripts": {
+    "start": "node bin/create.js"
+  },
+  "dependencies": {
+    "commander": "^11.0.0",
+    "inquirer": "^9.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
