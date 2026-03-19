@@ -1,0 +1,23 @@
+{
+  "name": "create-aport-integration",
+  "version": "1.0.0",
+  "description": "CLI to scaffold APort integration projects from templates",
+  "bin": {
+    "create-aport-integration": "./src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "jest"
+  },
+  "keywords": ["aport", "cli", "scaffold", "hacktoberfest"],
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^11.1.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
