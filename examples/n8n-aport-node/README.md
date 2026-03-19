@@ -1,6 +1,12 @@
 # APort Verification Node for n8n
 
-A custom n8n node that integrates with APort for workflow verification.
+A custom n8n node that integrates with APort for workflow verification with **conditional routing**.
+
+## What's New in v2.0
+
+- **Conditional Routing**: Automatically route workflows based on verification results
+- **Two Outputs**: "Allowed" for verified actions, "Denied" for blocked actions
+- **Better Error Handling**: Option to route errors to Denied output
 
 ## Prerequisites
 
@@ -47,6 +53,21 @@ To use this node, you need to create APort API credentials in n8n:
 | Actor Name | Name of the actor | No |
 | Context | JSON object with additional context | No |
 | Project ID | Your APort project ID | No |
+| Fail on Error | Route errors to Denied output (default: true) | No |
+
+### Conditional Routing
+
+This node has **two outputs**:
+
+1. **Allowed** (Output 0): When verification passes (`allow: true`)
+2. **Denied** (Output 1): When verification fails (`allow: false`) or errors occur
+
+Connect different workflow branches based on the verification result:
+
+```
+[Trigger] → [APort Verify] → [Allowed Branch]
+                         → [Denied Branch]
+```
 
 ### Example Use Cases
 
@@ -92,8 +113,45 @@ If verification is denied:
 
 ## Error Handling
 
-- If verification fails, the node will throw an error by default
-- Enable **"Continue On Fail"** in node settings to handle errors gracefully
+- By default, errors are routed to the **Denied** output
+- Set "Fail on Error" to false to throw errors instead
+- Use "Continue On Fail" node setting for graceful error handling
+
+## Workflow Example
+
+Here's a typical security workflow:
+
+```json
+{
+  "nodes": [
+    {
+      "name": "APort Verify",
+      "type": "aportVerify",
+      "parameters": {
+        "action": "execute_code",
+        "actorId": "{{ $json.user_id }}"
+      },
+      "typeVersion": 2,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "name": "Execute Code",
+      "type": "n8n-nodes-base.code",
+      "parameters": {
+        "jsCode": "return items;"
+      }
+    },
+    {
+      "name": "Send Alert",
+      "type": "n8n-nodes-base.slack",
+      "parameters": {
+        "channel": "#security-alerts",
+        "text": "Action blocked: {{ $json.reasons }}"
+      }
+    }
+  ]
+}
+```
 
 ## Development
 

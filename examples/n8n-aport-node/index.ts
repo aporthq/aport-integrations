@@ -12,13 +12,14 @@ export class APortVerify implements INodeType {
     name: 'aportVerify',
     icon: 'file:aport.svg',
     group: ['security'],
-    version: 1,
-    description: 'Verify actions with APort',
+    version: 2,
+    description: 'Verify actions with APort - with conditional routing',
     defaults: {
       name: 'APort Verify',
     },
     inputs: ['main'],
-    outputs: ['main'],
+    outputs: ['main', 'main'], // Output 0: Allowed, Output 1: Denied
+    outputNames: ['Allowed', 'Denied'],
     credentials: [
       {
         name: 'aportApi',
@@ -61,14 +62,23 @@ export class APortVerify implements INodeType {
         default: '',
         description: 'APort project ID (optional)',
       },
+      {
+        displayName: 'Fail on Error',
+        name: 'failOnError',
+        type: 'boolean',
+        default: true,
+        description: 'Whether to route errors to the Denied output or throw an error',
+      },
     ],
   };
 
   async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
     const items = this.getInputData();
-    const returnData: INodeExecutionData[] = [];
+    const allowedResults: INodeExecutionData[] = [];
+    const deniedResults: INodeExecutionData[] = [];
 
     const credentials = await this.getCredentials('aportApi');
+    const failOnError = this.getNodeParameter('failOnError', 0) as boolean;
 
     for (let i = 0; i < items.length; i++) {
       try {
@@ -95,7 +105,7 @@ export class APortVerify implements INodeType {
           context: {
             data: context,
           },
-          projectId: projectId || credentials.projectId || 'default',
+          projectId: projectId || (credentials as any).projectId || 'default',
         };
 
         const response = await this.helpers.request({
@@ -104,33 +114,50 @@ export class APortVerify implements INodeType {
           body,
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${credentials.apiKey}`,
+            Authorization: `Bearer ${(credentials as any).apiKey}`,
           },
           json: true,
         });
 
-        returnData.push({
+        const resultData: INodeExecutionData = {
           json: {
             success: true,
             allow: response.allow,
             reasons: response.reasons || [],
             ...response,
           },
-        });
+        };
+
+        // Route to appropriate output based on verification result
+        if (response.allow === true) {
+          allowedResults.push(resultData);
+        } else {
+          deniedResults.push(resultData);
+        }
       } catch (error) {
-        if (this.continueOnFail()) {
-          returnData.push({
+        if (failOnError) {
+          // Route errors to Denied output
+          deniedResults.push({
             json: {
               success: false,
+              allow: false,
               error: error.message,
             },
           });
-          continue;
+        } else if (this.continueOnFail()) {
+          deniedResults.push({
+            json: {
+              success: false,
+              allow: false,
+              error: error.message,
+            },
+          });
+        } else {
+          throw new NodeOperationError(this.getNode(), error.message);
         }
-        throw new NodeOperationError(this.getNode(), error.message);
       }
     }
 
-    return [returnData];
+    return [allowedResults, deniedResults];
   }
 }
