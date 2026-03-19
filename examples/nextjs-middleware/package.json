@@ -1,0 +1,21 @@
+{
+  "name": "aport-nextjs-middleware",
+  "version": "1.0.0",
+  "description": "Next.js middleware for APort verification — supports App Router and Pages Router",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest",
+    "dev": "node examples/server.js"
+  },
+  "keywords": ["aport", "nextjs", "middleware", "hacktoberfest"],
+  "license": "MIT",
+  "peerDependencies": {
+    "next": ">=13.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
