@@ -1,0 +1,66 @@
+{
+  "name": "aport-policy-support",
+  "displayName": "APort Policy Support",
+  "description": "APort Policy validation and IntelliSense for VS Code",
+  "version": "1.0.0",
+  "publisher": "aport",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "aport-policy",
+        "aliases": ["APort Policy", "aport-policy"],
+        "extensions": [".apolicy", ".aport"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "aport-policy",
+        "scopeName": "source.aport-policy",
+        "path": "./syntaxes/aport-policy.json"
+      }
+    ],
+    "schemas": [
+      {
+        "fileMatch": ["*.apolicy", "*.aport", "aport.json"],
+        "url": "./schemas/policy-schema.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "aport.validatePolicy",
+        "title": "Validate APort Policy"
+      },
+      {
+        "command": "aport.createPolicy",
+        "title": "Create New APort Policy"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "aport-policy",
+        "path": "./snippets/policy.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^8.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@types/vscode": "^1.75.0",
+    "typescript": "^5.0.0"
+  }
+}

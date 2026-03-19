@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "APort Policy Schema",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Policy version"
+    },
+    "name": {
+      "type": "string",
+      "description": "Policy name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Policy description"
+    },
+    "rules": {
+      "type": "array",
+      "description": "List of rules",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Rule ID"
+          },
+          "action": {
+            "type": "string",
+            "enum": ["allow", "deny", "challenge"],
+            "description": "Action to take"
+          },
+          "condition": {
+            "type": "object",
+            "description": "Condition to match",
+            "properties": {
+              "field": {
+                "type": "string",
+                "description": "Field to check"
+              },
+              "operator": {
+                "type": "string",
+                "enum": ["equals", "contains", "regex", "in", "gt", "lt"]
+              },
+              "value": {
+                "type": ["string", "number", "boolean", "array"]
+              }
+            }
+          },
+          "message": {
+            "type": "string",
+            "description": "Message when rule triggers"
+          }
+        }
+      }
+    }
+  },
+  "required": ["name", "rules"]
+}
