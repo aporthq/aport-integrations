@@ -1,0 +1,57 @@
+{
+  "Basic Policy": {
+    "prefix": "aport-policy",
+    "body": [
+      "{",
+      "  \"name\": \"${1:my-policy}\",",
+      "  \"version\": \"1.0.0\",",
+      "  \"description\": \"${2:Description of the policy}\",",
+      "  \"rules\": [",
+      "    {",
+      "      \"id\": \"${3:rule-1}\",",
+      "      \"action\": \"${4|allow,deny,challenge|}\",",
+      "      \"condition\": {",
+      "        \"field\": \"${5:actor.id}\",",
+      "        \"operator\": \"${6|equals,contains,regex|}\",",
+      "        \"value\": \"${7:*}\"",
+      "      },",
+      "      \"message\": \"${8:Access denied}\"",
+      "    }",
+      "  ]",
+      "}"
+    ],
+    "description": "Basic APort policy structure"
+  },
+  "Allow Rule": {
+    "prefix": "aport-allow",
+    "body": [
+      "{",
+      "  \"id\": \"${1:allow-rule}\",",
+      "  \"action\": \"allow\",",
+      "  \"condition\": {",
+      "    \"field\": \"${2:actor.id}\",",
+      "    \"operator\": \"${3|equals,contains|}\",",
+      "    \"value\": \"${4:*}\"",
+      "  },",
+      "  \"message\": \"${5:Allowed}\"",
+      "}"
+    ],
+    "description": "Allow rule"
+  },
+  "Deny Rule": {
+    "prefix": "aport-deny",
+    "body": [
+      "{",
+      "  \"id\": \"${1:deny-rule}\",",
+      "  \"action\": \"deny\",",
+      "  \"condition\": {",
+      "    \"field\": \"${2:context.ip}\",",
+      "    \"operator\": \"${3|in|}\",",
+      "    \"value\": [\"${4:bad-ip-1}\", \"${5:bad-ip-2}\"]",
+      "  },",
+      "  \"message\": \"${6:Blocked IP}\"",
+      "}"
+    ],
+    "description": "Deny rule"
+  }
+}
