@@ -1,0 +1,144 @@
+{
+  "name": "APort Verify",
+  "description": "Verify actions with APort AI security platform",
+  "key": "aport_verify",
+  "links": {
+    "website": "https://aport.io",
+    "github": "https://github.com/aporthq/aport-integrations"
+  },
+  "platformVersion": "15.0.0",
+  "id": "aport_verify_app",
+  "version": "1.0.0",
+  "schemas": {
+    "verify": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string",
+          "key": "action",
+          "label": "Action",
+          "helpText": "The action to verify (e.g., 'send_email', 'api_call')"
+        },
+        "actor_id": {
+          "type": "string",
+          "key": "actor_id",
+          "label": "Actor ID",
+          "helpText": "ID of the user or service performing the action"
+        },
+        "actor_name": {
+          "type": "string",
+          "key": "actor_name",
+          "label": "Actor Name",
+          "helpText": "Name of the user or service"
+        },
+        "context": {
+          "type": "object",
+          "key": "context",
+          "label": "Context",
+          "helpText": "Additional context as key-value pairs"
+        }
+      },
+      "required": ["action", "actor_id"]
+    }
+  },
+  "triggers": {},
+  "creates": {
+    "verify_action": {
+      "key": "verify_action",
+      "noun": "Verification",
+      "label": "Verify Action",
+      "description": "Verify an action with APort",
+      "operation": {
+        "inputFields": [
+          {
+            "key": "action",
+            "type": "string",
+            "label": "Action",
+            "required": true,
+            "helpText": "The action to verify"
+          },
+          {
+            "key": "actor_id",
+            "type": "string",
+            "label": "Actor ID",
+            "required": true,
+            "helpText": "ID of the actor"
+          },
+          {
+            "key": "actor_name",
+            "type": "string",
+            "label": "Actor Name",
+            "required": false,
+            "helpText": "Name of the actor"
+          },
+          {
+            "key": "context",
+            "type": "object",
+            "label": "Context",
+            "required": false,
+            "helpText": "Additional context"
+          }
+        ],
+        "outputFields": [
+          {
+            "key": "allow",
+            "type": "boolean",
+            "label": "Allowed"
+          },
+          {
+            "key": "reasons",
+            "type": "array",
+            "label": "Reasons"
+          }
+        ],
+        "operation": {
+          "type": "request",
+          "method": {
+            "url": "https://api.aport.io/verify",
+            "method": "POST",
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "auth": {
+              "type": "bearer",
+              "placement": "header",
+              "key": "Authorization"
+            }
+          },
+          "body": {
+            "action": "{{bundle.inputData.action}}",
+            "actor": {
+              "id": "{{bundle.inputData.actor_id}}",
+              "name": "{{bundle.inputData.actor_name || 'zapier-user'}}",
+              "owner": "zapier"
+            },
+            "context": {
+              "data": "{{bundle.inputData.context || {}}}"
+            },
+            "projectId": "{{bundle.authData.project_id || 'default'}}"
+          }
+        }
+      }
+    }
+  },
+  "authentication": {
+    "type": "bearer",
+    "placement": "header",
+    "fields": [
+      {
+        "key": "api_key",
+        "type": "string",
+        "label": "API Key",
+        "required": true,
+        "helpText": "Your APort API key"
+      },
+      {
+        "key": "project_id",
+        "type": "string",
+        "label": "Project ID",
+        "required": false,
+        "helpText": "Your APort project ID (default: default)"
+      }
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "name": "n8n-nodes-aport",
+  "version": "1.0.0",
+  "description": "APort verification node for n8n",
+  "keywords": [
+    "n8n",
+    "nodes",
+    "aport",
+    "security",
+    "verification"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "APort Team"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aporthq/aport-integrations.git"
+  },
+  "n8n": {
+    "n8nNodesType": "index.ts"
+  },
+  "dependencies": {
+    "n8n-workflow": "*"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^18.0.0"
+  }
+}

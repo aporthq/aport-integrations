@@ -1,0 +1,23 @@
+{
+  "name": "aport-cli",
+  "version": "1.0.0",
+  "description": "Quick integration setup CLI for APort",
+  "main": "bin/cli.js",
+  "type": "module",
+  "bin": {
+    "aport": "./bin/cli.js"
+  },
+  "scripts": {
+    "start": "node bin/cli.js"
+  },
+  "keywords": ["aport", "cli", "integration", "scaffolding"],
+  "author": "APort Team",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "inquirer": "^9.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
