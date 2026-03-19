@@ -1,3 +1,5 @@
+[![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/aporthq/aport-integrations/tree/main/examples/nextjs-middleware&env=APORT_API_KEY,APORT_PROJECT_ID&envDescription=APort%20API%20credentials)
+
 # APort Next.js Middleware
 
 Next.js middleware for APort verification, supporting both App Router and Pages Router.
