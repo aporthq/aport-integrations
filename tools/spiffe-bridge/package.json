@@ -1,0 +1,9 @@
+{
+  "name": "aport-spiffe-bridge",
+  "version": "1.0.0",
+  "description": "SPIFFE/SPIRE to APort identity bridge",
+  "main": "src/index.js",
+  "scripts": { "start": "node src/index.js" },
+  "dependencies": {},
+  "license": "MIT"
+}
