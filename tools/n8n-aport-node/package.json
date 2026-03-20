@@ -1,0 +1,30 @@
+{
+  "name": "n8n-nodes-aport",
+  "version": "1.0.0",
+  "description": "n8n community node for APort Policy Checks",
+  "keywords": ["n8n-community-node-package", "n8n", "aport", "policy"],
+  "license": "MIT",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc && npm run copy-files",
+    "copy-files": "node -e \"const fs=require('fs'); fs.cpSync('src/nodes/Aport/', 'dist/nodes/Aport/', {recursive:true})\"",
+    "dev": "npm run build && tsc --watch"
+  },
+  "files": ["dist"],
+  "n8n": {
+    "n8nNodesPackageVersion": "1",
+    "credentials": [
+      "dist/nodes/Aport/credentials/AportApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Aport/AportVerify.node.js"
+    ]
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "n8n-workflow": "^1.0.0"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  }
+}
