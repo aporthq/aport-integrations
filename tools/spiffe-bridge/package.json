@@ -1,0 +1,16 @@
+{
+  "name": "aport-spiffe-bridge",
+  "version": "1.0.0",
+  "description": "Bridge between SPIFFE/SPIRE identity system and APort passport framework",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@spiffe/spiffe-node": "^2.1.0",
+    "@grpc/grpc-js": "^1.10.0"
+  },
+  "keywords": ["spiffe", "spire", "aport", "identity", "bridge"],
+  "license": "MIT"
+}
