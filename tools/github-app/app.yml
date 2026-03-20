@@ -1,0 +1,14 @@
+# GitHub App Manifest — APort Guard
+# Use this file with https://github.com/settings/apps/new (choose "New GitHub App")
+# or create from this manifest: https://github.com/apps/new?manifest=
+#
+# See: https://probot.github.io/docs/development/#publishing-a-github-app
+
+default_permissions:
+  checks: write
+  pull_requests: read
+  contents: read
+  metadata: read
+
+default_events:
+  - pull_request

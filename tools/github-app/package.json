@@ -1,0 +1,20 @@
+{
+  "name": "aport-github-app",
+  "version": "1.0.0",
+  "description": "GitHub App for APort agent identity verification on PRs",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "probot run src/index.js",
+    "dev": "nodemon --exec 'probot run src/index.js'"
+  },
+  "dependencies": {
+    "probot": "^13.0.0",
+    "@octokit/rest": "^21.0.0",
+    "dotenv": "^16.4.0",
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "license": "MIT"
+}
