@@ -1,0 +1,17 @@
+name: APort Guard
+description: Agent identity verification and policy enforcement for pull requests
+# URL to register the GitHub App
+url: https://github.com/aporthq/aport-integrations
+
+public: true
+
+# Webhook events
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+# Permissions
+permissions:
+  checks: write
+  pull_requests: read
+  contents: read
