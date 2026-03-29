@@ -1,0 +1,27 @@
+{
+  "name": "aport-discord-bot",
+  "version": "1.0.0",
+  "description": "Discord bot for APort team verification workflows",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "jest",
+    "lint": "eslint src/"
+  },
+  "keywords": ["discord", "aport", "verification", "discord-bot", "team-workflow"],
+  "author": "APort Community",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "eslint": "^8.57.0",
+    "nodemon": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
