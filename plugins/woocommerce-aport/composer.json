@@ -1,0 +1,24 @@
+{
+  "name": "aport/woocommerce-aport",
+  "version": "1.0.0",
+  "description": "APort verification for WooCommerce orders and refunds",
+  "type": "wordpress-plugin",
+  "require": {
+    "php": ">=7.4",
+    "composer/installers": "^2.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.6",
+    "woocommerce/woocommerce": "^8.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "APort\\WooCommerce\\": "src/"
+    }
+  },
+  "scripts": {
+    "test": "phpunit"
+  },
+  "keywords": ["woocommerce", "aport", "verification", "refund", "order"],
+  "license": "MIT"
+}
