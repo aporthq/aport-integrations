@@ -1,0 +1,147 @@
+{
+  "icon": {
+    "brandColor": "#0078D4",
+    "color": "#0078D4"
+  },
+  "capabilities": [],
+  "connectionParameters": {
+    "api_key": {
+      "type": "securestring",
+      "uiDefinition": {
+        "displayName": "API Key",
+        "description": "Enter your APort API Key",
+        "tooltip": "Get your API key from https://aport.io/dashboard"
+      }
+    },
+    "project_id": {
+      "type": "string",
+      "uiDefinition": {
+        "displayName": "Project ID",
+        "description": "Enter your APort Project ID (default: default)"
+      }
+    }
+  },
+  "triggers": {},
+  "actions": {
+    "verifyAction": {
+      "name": "verifyAction",
+      "title": "Verify Action",
+      "description": "Verify an action with APort",
+      "type": "ApiConnection",
+      "inputs": {
+        "parameters": {
+          "action": "@triggerBody()['action']",
+          "actorId": "@triggerBody()['actorId']",
+          "actorName": "@triggerBody()['actorName']",
+          "context": "@triggerBody()['context']"
+        },
+        "host": {
+          "connection": {
+            "name": "@parameters('$connections')['aport']['connectionId']"
+          }
+        },
+        "operationId": "VerifyAction"
+      }
+    },
+    "checkAccess": {
+      "name": "checkAccess",
+      "title": "Check Access",
+      "description": "Check if an actor has access",
+      "type": "ApiConnection",
+      "inputs": {
+        "parameters": {
+          "actorId": "@triggerBody()['actorId']",
+          "resource": "@triggerBody()['resource']"
+        },
+        "host": {
+          "connection": {
+            "name": "@parameters('$connections')['aport']['connectionId']"
+          }
+        },
+        "operationId": "CheckAccess"
+      }
+    }
+  },
+  "apiDefinitions": {
+    "swagger": {
+      "swagger": "2.0",
+      "info": {
+        "title": "APort",
+        "description": "Verify actions with APort AI security",
+        "version": "1.0.0"
+      },
+      "host": "api.aport.io",
+      "basePath": "/",
+      "schemes": ["https"],
+      "paths": {
+        "/verify": {
+          "post": {
+            "summary": "Verify Action",
+            "description": "Verify an action with APort",
+            "operationId": "VerifyAction",
+            "consumes": ["application/json"],
+            "produces": ["application/json"],
+            "parameters": [
+              {
+                "name": "body",
+                "in": "body",
+                "required": true,
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "action": {
+                      "type": "string",
+                      "description": "Action to verify"
+                    },
+                    "actorId": {
+                      "type": "string",
+                      "description": "Actor ID"
+                    },
+                    "actorName": {
+                      "type": "string",
+                      "description": "Actor Name"
+                    },
+                    "context": {
+                      "type": "object",
+                      "description": "Additional context"
+                    },
+                    "projectId": {
+                      "type": "string",
+                      "description": "Project ID"
+                    }
+                  }
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Success",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "allow": {
+                      "type": "boolean"
+                    },
+                    "reasons": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "securityDefinitions": {
+        "api_key": {
+          "type": "apiKey",
+          "in": "header",
+          "name": "Authorization"
+        }
+      }
+    }
+  }
+}
