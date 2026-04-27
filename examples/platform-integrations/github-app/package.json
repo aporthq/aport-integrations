@@ -1,0 +1,13 @@
+
+{
+  "name": "aport-github-app-example",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Framework-agnostic GitHub App sample that gates pull requests with APort policy checks",
+  "scripts": {
+    "test": "node tests/app.test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
