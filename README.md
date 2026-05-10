@@ -184,6 +184,7 @@ aport-integrations/
 │   └── postman-collection/     # Postman collection
 ├── templates/                  # Integration scaffolding templates
 │   ├── javascript-middleware/  # Express.js template
+│   ├── nextjs-middleware/      # Next.js middleware package
 │   └── python-middleware/      # FastAPI template
 ├── sdk/                        # References to official SDKs
 │   └── README.md               # Links to aport-sdks repository
@@ -243,7 +244,7 @@ Native support for popular web frameworks.
 
 | Framework | SDK/Middleware | Status | Maintainer |
 |-----------|----------------|--------|------------|
-| Next.js | Middleware package | ✅ Active | Community |
+| [Next.js](templates/nextjs-middleware/) | Middleware package | ✅ Active | Community |
 | Express.js | Middleware package | ✅ Active | Community |
 | FastAPI | Middleware package | ✅ Active | Community |
 | Django | Middleware package | 🚧 In Progress | Community |
