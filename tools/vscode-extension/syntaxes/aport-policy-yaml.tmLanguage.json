@@ -1,0 +1,22 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "APort Policy YAML",
+  "scopeName": "source.aport-policy.yaml",
+  "patterns": [
+    {
+      "include": "source.yaml"
+    },
+    {
+      "name": "constant.language.aport.policy-id",
+      "match": "\\b[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)+\\.v[0-9]+\\b"
+    },
+    {
+      "name": "keyword.control.aport.effect",
+      "match": "\\b(allow|deny|review)\\b"
+    },
+    {
+      "name": "entity.name.tag.aport.policy-key",
+      "match": "^\\s*(id|name|version|description|defaults|rules|metadata|effect|action|conditions|reason):"
+    }
+  ]
+}

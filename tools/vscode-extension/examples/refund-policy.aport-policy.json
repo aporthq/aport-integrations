@@ -1,0 +1,39 @@
+{
+  "id": "finance.payment.refund.v1",
+  "name": "Refund Approval Policy",
+  "version": "1.0.0",
+  "description": "Controls agent-initiated refunds by amount and currency.",
+  "defaults": {
+    "effect": "deny",
+    "reason": "Refund requires manual review when no rule matches."
+  },
+  "rules": [
+    {
+      "id": "small-usd-refund",
+      "effect": "allow",
+      "action": "refund.create",
+      "conditions": {
+        "amount": {
+          "lte": 50
+        },
+        "currency": "USD"
+      },
+      "reason": "Agent can process low-value USD refunds."
+    },
+    {
+      "id": "large-refund-review",
+      "effect": "review",
+      "action": "refund.create",
+      "conditions": {
+        "amount": {
+          "gt": 50
+        }
+      },
+      "reason": "Large refunds need human review."
+    }
+  ],
+  "metadata": {
+    "owner": "trust-and-safety",
+    "tags": ["refunds", "payments"]
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "name": "aport-policy-tools",
+  "displayName": "APort Policy Tools",
+  "description": "VS Code language support for APort policy pack development.",
+  "version": "0.1.0",
+  "publisher": "aport-community",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aporthq/aport-integrations.git",
+    "directory": "tools/vscode-extension"
+  },
+  "engines": {
+    "vscode": "^1.86.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets",
+    "Linters"
+  ],
+  "keywords": [
+    "aport",
+    "policy",
+    "policy-pack",
+    "agent-verification",
+    "intellisense"
+  ],
+  "activationEvents": [
+    "onLanguage:aport-policy-json",
+    "onLanguage:aport-policy-yaml",
+    "onCommand:aportPolicies.validateCurrentFile"
+  ],
+  "main": "./out/src/extension.js",
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "test": "npm run compile && node --test out/test/*.test.js",
+    "package": "npm run compile && vsce package"
+  },
+  "dependencies": {
+    "@aporthq/sdk-node": "^0.1.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "@types/vscode": "^1.86.0",
+    "@vscode/vsce": "^3.2.1",
+    "typescript": "^5.4.5"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "aportPolicies.validateCurrentFile",
+        "title": "APort: Validate Current Policy Pack"
+      }
+    ],
+    "languages": [
+      {
+        "id": "aport-policy-json",
+        "aliases": [
+          "APort Policy JSON",
+          "aport-policy-json"
+        ],
+        "extensions": [
+          ".aport-policy.json",
+          ".aport.json"
+        ],
+        "configuration": "./language-configuration-json.json"
+      },
+      {
+        "id": "aport-policy-yaml",
+        "aliases": [
+          "APort Policy YAML",
+          "aport-policy-yaml"
+        ],
+        "extensions": [
+          ".aport-policy.yaml",
+          ".aport-policy.yml"
+        ],
+        "configuration": "./language-configuration-yaml.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "aport-policy-json",
+        "scopeName": "source.aport-policy.json",
+        "path": "./syntaxes/aport-policy-json.tmLanguage.json"
+      },
+      {
+        "language": "aport-policy-yaml",
+        "scopeName": "source.aport-policy.yaml",
+        "path": "./syntaxes/aport-policy-yaml.tmLanguage.json"
+      }
+    ],
+    "jsonValidation": [
+      {
+        "fileMatch": [
+          "*.aport-policy.json",
+          "*.aport.json"
+        ],
+        "url": "./schemas/aport-policy.schema.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "aport-policy-json",
+        "path": "./snippets/aport-policy-json.code-snippets"
+      },
+      {
+        "language": "aport-policy-yaml",
+        "path": "./snippets/aport-policy-yaml.code-snippets"
+      }
+    ]
+  }
+}
