@@ -90,6 +90,10 @@ We provide scaffolding templates to help you get started quickly:
 cp -r templates/javascript-middleware examples/your-integration-name
 cd examples/your-integration-name
 
+# For Next.js middleware integrations
+cp -r templates/nextjs-middleware examples/your-integration-name
+cd examples/your-integration-name
+
 # For Python integrations
 cp -r templates/python-middleware examples/your-integration-name
 cd examples/your-integration-name
@@ -111,6 +115,7 @@ cd examples/your-integration-name
 
 **Available Templates:**
 - **`templates/javascript-middleware/`** - Express.js middleware template
+- **`templates/nextjs-middleware/`** - Next.js middleware template with App Router and Pages Router support
 - **`templates/python-middleware/`** - FastAPI middleware template
 
 **Template Structure:**
