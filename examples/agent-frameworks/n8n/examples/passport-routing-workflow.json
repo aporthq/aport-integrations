@@ -1,0 +1,168 @@
+{
+  "name": "APort Passport Routing Example",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "manual-trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        260,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "order-id",
+              "name": "order_id",
+              "type": "string",
+              "value": "order_123"
+            },
+            {
+              "id": "amount",
+              "name": "amount",
+              "type": "number",
+              "value": 500
+            },
+            {
+              "id": "currency",
+              "name": "currency",
+              "type": "string",
+              "value": "USD"
+            }
+          ]
+        }
+      },
+      "id": "sample-context",
+      "name": "Sample Refund Context",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        500,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "passportId": "ap_your_passport_id",
+        "policyId": "finance.payment.refund.v1",
+        "contextJson": "={\"amount\": {{$json.amount}}, \"currency\": \"{{$json.currency}}\", \"order_id\": \"{{$json.order_id}}\"}",
+        "idempotencyKey": "={{$execution.id}}",
+        "includeInputData": true
+      },
+      "id": "aport-passport-router",
+      "name": "APort Passport Router",
+      "type": "n8n-nodes-aport-passport-router.aPortPassportRouter",
+      "typeVersion": 1,
+      "position": [
+        760,
+        300
+      ],
+      "credentials": {
+        "aportApi": {
+          "id": "replace-with-your-credential-id",
+          "name": "APort API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "approved-message",
+              "name": "route",
+              "type": "string",
+              "value": "approved"
+            }
+          ]
+        }
+      },
+      "id": "allowed-route",
+      "name": "Allowed Route",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1020,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "denied-message",
+              "name": "route",
+              "type": "string",
+              "value": "denied"
+            }
+          ]
+        }
+      },
+      "id": "denied-route",
+      "name": "Denied Route",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1020,
+        420
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Sample Refund Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sample Refund Context": {
+      "main": [
+        [
+          {
+            "node": "APort Passport Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "APort Passport Router": {
+      "main": [
+        [
+          {
+            "node": "Allowed Route",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Denied Route",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
