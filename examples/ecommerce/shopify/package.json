@@ -1,0 +1,31 @@
+{
+  "name": "aport-shopify-refund-guardrail",
+  "version": "1.0.0",
+  "description": "Shopify refund guardrail app using APort policy verification.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "jest --runInBand"
+  },
+  "keywords": [
+    "aport",
+    "shopify",
+    "refund",
+    "guardrail"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}
