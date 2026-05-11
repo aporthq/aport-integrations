@@ -1,0 +1,28 @@
+{
+  "name": "aport-ap2-bridge-example",
+  "version": "1.0.0",
+  "description": "APort passport authorization bridge for AP2 payment intents",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "example": "node examples/mock-payment-flow.js"
+  },
+  "keywords": [
+    "aport",
+    "ap2",
+    "agent-payments",
+    "payment-authorization",
+    "passport"
+  ],
+  "author": "APort Community",
+  "license": "MIT",
+  "dependencies": {
+    "@aporthq/sdk-node": "^0.1.3"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
