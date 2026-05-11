@@ -1,0 +1,49 @@
+{
+  "APort Policy Pack": {
+    "prefix": "aport-policy",
+    "description": "Create an APort policy pack.",
+    "body": [
+      "{",
+      "  \"id\": \"${1:finance.payment.refund.v1}\",",
+      "  \"name\": \"${2:Refund Approval Policy}\",",
+      "  \"version\": \"${3:1.0.0}\",",
+      "  \"description\": \"${4:Controls agent-initiated refunds.}\",",
+      "  \"defaults\": {",
+      "    \"effect\": \"deny\",",
+      "    \"reason\": \"No matching APort policy rule.\"",
+      "  },",
+      "  \"rules\": [",
+      "    {",
+      "      \"id\": \"${5:small-refund}\",",
+      "      \"effect\": \"allow\",",
+      "      \"action\": \"${6:refund.create}\",",
+      "      \"conditions\": {",
+      "        \"amount\": { \"lte\": ${7:50} },",
+      "        \"currency\": \"${8:USD}\"",
+      "      },",
+      "      \"reason\": \"${9:Agent can process low-value refunds.}\"",
+      "    }",
+      "  ],",
+      "  \"metadata\": {",
+      "    \"owner\": \"${10:trust-and-safety}\",",
+      "    \"tags\": [\"${11:refunds}\"]",
+      "  }",
+      "}"
+    ]
+  },
+  "APort Policy Rule": {
+    "prefix": "aport-rule",
+    "description": "Create an APort policy rule.",
+    "body": [
+      "{",
+      "  \"id\": \"${1:rule-id}\",",
+      "  \"effect\": \"${2|allow,deny,review|}\",",
+      "  \"action\": \"${3:action.name}\",",
+      "  \"conditions\": {",
+      "    \"${4:field}\": \"${5:value}\"",
+      "  },",
+      "  \"reason\": \"${6:Decision reason}\"",
+      "}"
+    ]
+  }
+}

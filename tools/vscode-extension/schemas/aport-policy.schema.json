@@ -1,0 +1,110 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "APort Policy Pack",
+  "description": "Schema for APort policy packs used by agent identity verification workflows.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["id", "name", "version", "description", "rules"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)+\\.v[0-9]+$",
+      "description": "Versioned policy identifier, for example finance.payment.refund.v1."
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable policy pack name."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Policy pack semantic version."
+    },
+    "description": {
+      "type": "string",
+      "description": "Short explanation of what the policy pack protects."
+    },
+    "defaults": {
+      "type": "object",
+      "description": "Default evaluation behavior for unmatched requests.",
+      "properties": {
+        "effect": {
+          "$ref": "#/definitions/effect"
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "rules": {
+      "type": "array",
+      "description": "Ordered verification rules.",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/definitions/rule"
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Optional ownership, tags, and documentation metadata.",
+      "properties": {
+        "owner": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "definitions": {
+    "effect": {
+      "type": "string",
+      "enum": ["allow", "deny", "review"],
+      "description": "Decision to apply when the rule matches."
+    },
+    "rule": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["id", "effect", "action"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Stable rule identifier."
+        },
+        "effect": {
+          "$ref": "#/definitions/effect"
+        },
+        "action": {
+          "type": "string",
+          "description": "Action or capability guarded by this rule."
+        },
+        "conditions": {
+          "description": "Context conditions required for the rule to match.",
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": true
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "description": "Human-readable explanation for the decision."
+        }
+      }
+    }
+  }
+}

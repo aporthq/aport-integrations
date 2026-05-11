@@ -1,0 +1,28 @@
+id: data.export.v1
+name: Data Export Policy
+version: 1.0.0
+description: Controls customer data export requests.
+defaults:
+  effect: deny
+  reason: Export request does not match an approved rule.
+rules:
+  - id: small-customer-export
+    effect: allow
+    action: data.export
+    conditions:
+      rows:
+        lte: 1000
+      dataset: customers
+    reason: Agent can export limited customer data.
+  - id: large-export-review
+    effect: review
+    action: data.export
+    conditions:
+      rows:
+        gt: 1000
+    reason: Large exports require manual review.
+metadata:
+  owner: trust-and-safety
+  tags:
+    - data-export
+    - privacy
