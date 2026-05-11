@@ -141,7 +141,7 @@ cd aport-integrations
 
 # Explore integrations by category
 ls examples/
-# agent-frameworks/  ecommerce/  developer-tools/  middleware/  protocol-bridges/
+# agent-frameworks/  ecommerce/  developer-tools/  middleware/  platform-integrations/  protocol-bridges/
 ```
 
 ### 2. Try an Integration
@@ -177,6 +177,7 @@ aport-integrations/
 │   ├── agent-frameworks/        # LangChain, CrewAI, n8n, etc.
 │   ├── ecommerce/              # Shopify, WooCommerce, Stripe
 │   ├── middleware/             # Express, FastAPI, Django, etc.
+│   ├── platform-integrations/  # Zapier and other automation platforms
 │   └── protocol-bridges/       # OpenAPI, AP2, SPIFFE/SPIRE
 ├── tools/                      # Developer tools and utilities
 │   ├── cli/                    # APort CLI for scaffolding
@@ -210,6 +211,13 @@ Make APort the default trust layer for AI agent frameworks.
 | [CrewAI Task Decorator](examples/agent-frameworks/crewai/) | `@aport_verify` decorator for CrewAI tasks | ✅ Active | Community |
 | [n8n APort Node](examples/agent-frameworks/n8n/) | Custom n8n node for APort verification | 🚧 In Progress | Community |
 | [LangGraph Checkpoints](examples/agent-frameworks/langgraph/) | APort verification in LangGraph state machines | 📋 Planned | Community |
+
+### 🔀 **Platform Automation Integrations**
+Make APort verification available in no-code and low-code automation platforms.
+
+| Integration | Description | Status | Maintainer |
+|-------------|-------------|--------|------------|
+| [Zapier Custom App](examples/platform-integrations/zapier/) | APort Verify action for routing Zaps by policy decision | ✅ Active | Community |
 
 ### 🛒 **E-commerce Platform Guardrails**
 Prove the refund use case with working platform integrations.

@@ -1,0 +1,44 @@
+{
+  "name": "Route a refund request through APort",
+  "description": "Example Zap blueprint showing how to route automation based on the APort Verify action result.",
+  "steps": [
+    {
+      "type": "trigger",
+      "app": "Webhook by Zapier",
+      "event": "Catch Hook",
+      "output_example": {
+        "passport_id": "ap_a2d10232c6534523812423eec8a1425c",
+        "amount": 500,
+        "currency": "USD",
+        "order_id": "order_123"
+      }
+    },
+    {
+      "type": "action",
+      "app": "APort",
+      "event": "APort Verify",
+      "input": {
+        "agentId": "{{passport_id}}",
+        "policyId": "finance.payment.refund.v1",
+        "context": {
+          "amount": "{{amount}}",
+          "currency": "{{currency}}",
+          "order_id": "{{order_id}}"
+        },
+        "failOnDeny": false
+      }
+    },
+    {
+      "type": "path",
+      "name": "Allowed",
+      "condition": "{{APort Verify.allow}} is true",
+      "next_step": "Continue refund workflow"
+    },
+    {
+      "type": "path",
+      "name": "Denied",
+      "condition": "{{APort Verify.allow}} is false",
+      "next_step": "Notify operations and stop fulfillment"
+    }
+  ]
+}
