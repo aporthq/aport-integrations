@@ -62,6 +62,7 @@ We're actively building more SDKs and integrations! Check out our [open issues](
 
 #### Platform Integrations
 - **Zapier App** - Custom Zapier app for APort verification
+- **Microsoft Power Automate Connector** - Enterprise workflow verification connector
 - **GitHub App** - PR/Merge verification
 - **Discord Bot** - Team verification workflows
 
@@ -107,6 +108,7 @@ We're actively building the APort ecosystem with **22+ open issues** and **6 iss
 - **n8n**: Low-code automation - needs custom verification node
 - **LangGraph**: State machine workflows - needs checkpoint integration
 - **Zapier**: No-code automation - needs custom app
+- **Power Automate**: Enterprise low-code automation - custom connector available
 
 ### **E-commerce Platform Integration** (Design Partner Demos)
 - **Shopify**: Complete app with refund guardrails
@@ -228,6 +230,12 @@ Reduce APort integration time from hours to minutes.
 | [APort CLI](tools/cli/) | `npx create-aport-integration` scaffolding tool | ✅ Active | Community |
 | [VS Code Extension](tools/vscode-extension/) | Policy development with IntelliSense | 🚧 In Progress | Community |
 | [Postman Collection](tools/postman-collection/) | Complete API testing collection | ✅ Active | Community |
+
+### Enterprise & Low-Code Integrations
+
+| Integration | Description | Status | Maintainer |
+|-------------|-------------|--------|------------|
+| [Power Automate Connector](examples/platform-integrations/power-automate/) | Custom connector for APort policy verification in Microsoft workflows | ✅ Active | Community |
 
 ### 🌉 **Protocol Bridges & Standards**
 Position APort as the universal verify layer.

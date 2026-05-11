@@ -1,0 +1,44 @@
+{
+  "$schema": "https://paconn-cli.azurewebsites.net/apiProperties.schema.json",
+  "properties": {
+    "connectionParameters": {
+      "api_key": {
+        "type": "securestring",
+        "uiDefinition": {
+          "displayName": "APort API key",
+          "description": "Paste the API key from your APort dashboard. Do not include the Bearer prefix.",
+          "tooltip": "The connector stores this as a secure Power Platform connection parameter.",
+          "constraints": {
+            "tabIndex": 2,
+            "clearText": false,
+            "required": "true"
+          }
+        }
+      }
+    },
+    "iconBrandColor": "#06b6d4",
+    "capabilities": [],
+    "publisher": "APort Community",
+    "stackOwner": "APort",
+    "policyTemplateInstances": [
+      {
+        "templateId": "setheader",
+        "title": "Set Authorization header",
+        "parameters": {
+          "x-ms-apimTemplateParameter.name": "Authorization",
+          "x-ms-apimTemplateParameter.value": "Bearer @connectionParameters('api_key')",
+          "x-ms-apimTemplateParameter.existsAction": "override"
+        }
+      },
+      {
+        "templateId": "setheader",
+        "title": "Set JSON content type",
+        "parameters": {
+          "x-ms-apimTemplateParameter.name": "Content-Type",
+          "x-ms-apimTemplateParameter.value": "application/json",
+          "x-ms-apimTemplateParameter.existsAction": "skip"
+        }
+      }
+    ]
+  }
+}
