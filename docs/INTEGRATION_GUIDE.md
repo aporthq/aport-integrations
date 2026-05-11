@@ -196,6 +196,32 @@ class APortIntegration:
             raise
 ```
 
+### Django Middleware
+
+Use the package under `examples/middleware/django` when building Django apps:
+
+```python
+INSTALLED_APPS = [
+    "aport_django",
+]
+
+MIDDLEWARE = [
+    "aport_django.middleware.APortVerificationMiddleware",
+]
+
+APORT_POLICIES = [
+    {
+        "path": "/payments/refund/",
+        "methods": ["POST"],
+        "policy": "finance.payment.refund.v1",
+        "context": {"risk": "high"},
+    }
+]
+```
+
+The middleware extracts the agent ID from request headers, query parameters, form
+data, or JSON bodies before calling `aporthq-sdk-python`.
+
 ### Go
 
 ```go

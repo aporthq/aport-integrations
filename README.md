@@ -45,6 +45,7 @@ The official APort SDKs are maintained in the [aport-sdks repository](https://gi
 #### Python
 - **Core SDK**: [aporthq-sdk-python](https://github.com/aporthq/aport-sdks/tree/main/python) - Core Python SDK
 - **FastAPI Middleware**: [agent-passport-middleware-fastapi](https://github.com/aporthq/aport-sdks/tree/main/fastapi) - FastAPI middleware
+- **Django Middleware**: [aport-middleware-django](examples/middleware/django/) - Django middleware and decorators
 
 ### 🚧 In Development (Hacktoberfest 2025)
 
@@ -120,7 +121,6 @@ We're actively building the APort ecosystem with **22+ open issues** and **6 iss
 
 ### **Framework Middleware** (Native Support)
 - **Next.js**: App Router and Pages Router support
-- **Django**: Python web framework middleware
 - **Laravel**: PHP framework with Artisan commands
 - **Rails**: Ruby gem with generators
 - **Go Frameworks**: Gin, Echo, Fiber middleware
@@ -246,7 +246,7 @@ Native support for popular web frameworks.
 | Next.js | Middleware package | ✅ Active | Community |
 | Express.js | Middleware package | ✅ Active | Community |
 | FastAPI | Middleware package | ✅ Active | Community |
-| Django | Middleware package | 🚧 In Progress | Community |
+| [Django](examples/middleware/django/) | Middleware package | ✅ Active | Community |
 | Laravel | Composer package | 📋 Planned | Community |
 | Rails | Ruby gem | 📋 Planned | Community |
 | Go | Official SDK | 🚧 In Progress | Community |
