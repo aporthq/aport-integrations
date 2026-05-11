@@ -208,7 +208,7 @@ Make APort the default trust layer for AI agent frameworks.
 |-------------|-------------|--------|------------|
 | [LangChain Tool Guard](examples/agent-frameworks/langchain/) | Secure LangChain tools with APort verification | ✅ Active | Community |
 | [CrewAI Task Decorator](examples/agent-frameworks/crewai/) | `@aport_verify` decorator for CrewAI tasks | ✅ Active | Community |
-| [n8n APort Node](examples/agent-frameworks/n8n/) | Custom n8n node for APort verification | 🚧 In Progress | Community |
+| [n8n APort Node](examples/agent-frameworks/n8n/) | Custom n8n node for APort verification | ✅ Active | Community |
 | [LangGraph Checkpoints](examples/agent-frameworks/langgraph/) | APort verification in LangGraph state machines | 📋 Planned | Community |
 
 ### 🛒 **E-commerce Platform Guardrails**
