@@ -4,7 +4,7 @@ VS Code language support for APort policy pack development.
 
 ## Features
 
-- JSON schema validation and IntelliSense for `*.aport-policy.json` and `*.aport.json` files
+- JSON schema validation and IntelliSense for `*.aport-policy.json` and `*.aport.json` files while preserving VS Code JSON mode
 - APort-aware validation command for JSON and YAML policy packs
 - Syntax highlighting for common policy identifiers, effects, and policy keys
 - Snippets for full policy packs and individual rules

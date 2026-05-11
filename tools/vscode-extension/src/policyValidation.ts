@@ -121,13 +121,13 @@ const validateYamlPolicy = (text: string): PolicyDiagnostic[] => {
     );
   }
 
-  if (/^rules:\s*$/m.test(text) && !/^\s*-\s+id:/m.test(text)) {
+  if (/^rules:\s*$/m.test(text) && !yamlRulesSectionHasRuleId(lines)) {
     diagnostics.push(
       diagnostic("error", "Policy pack must define at least one rule with an id.", ...findYamlFieldPosition(text, "rules"))
     );
   }
 
-  for (const match of text.matchAll(/effect:\s*["']?([^"'\s#]+)["']?/g)) {
+  for (const match of text.matchAll(/^\s*effect:\s*["']?([^"'\s#]+)["']?/gm)) {
     if (!VALID_EFFECTS.has(match[1])) {
       diagnostics.push(
         diagnostic("error", 'Rule effect must be one of "allow", "deny", or "review".', ...offsetToPosition(text, match.index ?? 0))
@@ -215,6 +215,27 @@ const looksLikeJson = (trimmed: string, fileName: string): boolean => {
 
 const isRecord = (value: unknown): value is Record<string, unknown> => {
   return typeof value === "object" && value !== null;
+};
+
+const yamlRulesSectionHasRuleId = (lines: string[]): boolean => {
+  let inRulesSection = false;
+
+  for (const line of lines) {
+    if (/^rules:\s*$/.test(line)) {
+      inRulesSection = true;
+      continue;
+    }
+
+    if (inRulesSection && /^[A-Za-z][A-Za-z0-9_-]*:/.test(line)) {
+      return false;
+    }
+
+    if (inRulesSection && /^\s*-\s+id:/.test(line)) {
+      return true;
+    }
+  }
+
+  return false;
 };
 
 const diagnostic = (

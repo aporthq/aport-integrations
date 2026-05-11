@@ -26,7 +26,7 @@
     "intellisense"
   ],
   "activationEvents": [
-    "onLanguage:aport-policy-json",
+    "onLanguage:json",
     "onLanguage:aport-policy-yaml",
     "onCommand:aportPolicies.validateCurrentFile"
   ],
@@ -55,18 +55,6 @@
     ],
     "languages": [
       {
-        "id": "aport-policy-json",
-        "aliases": [
-          "APort Policy JSON",
-          "aport-policy-json"
-        ],
-        "extensions": [
-          ".aport-policy.json",
-          ".aport.json"
-        ],
-        "configuration": "./language-configuration-json.json"
-      },
-      {
         "id": "aport-policy-yaml",
         "aliases": [
           "APort Policy YAML",
@@ -80,11 +68,6 @@
       }
     ],
     "grammars": [
-      {
-        "language": "aport-policy-json",
-        "scopeName": "source.aport-policy.json",
-        "path": "./syntaxes/aport-policy-json.tmLanguage.json"
-      },
       {
         "language": "aport-policy-yaml",
         "scopeName": "source.aport-policy.yaml",
@@ -102,7 +85,7 @@
     ],
     "snippets": [
       {
-        "language": "aport-policy-json",
+        "language": "json",
         "path": "./snippets/aport-policy-json.code-snippets"
       },
       {

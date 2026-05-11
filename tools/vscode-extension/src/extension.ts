@@ -68,9 +68,11 @@ export function activate(context: vscode.ExtensionContext): void {
       );
     }),
     vscode.languages.registerCompletionItemProvider(
-      ["aport-policy-json", "aport-policy-yaml"],
+      ["json", "aport-policy-yaml"],
       {
-        provideCompletionItems() {
+        provideCompletionItems(document) {
+          if (!isAportPolicyDocument(document)) return undefined;
+
           const keyItems = POLICY_KEYS.map((key) => {
             const item = new vscode.CompletionItem(key, vscode.CompletionItemKind.Property);
             item.detail = "APort policy field";
@@ -90,8 +92,10 @@ export function activate(context: vscode.ExtensionContext): void {
       "\"",
       "'"
     ),
-    vscode.languages.registerHoverProvider(["aport-policy-json", "aport-policy-yaml"], {
+    vscode.languages.registerHoverProvider(["json", "aport-policy-yaml"], {
       provideHover(document, position) {
+        if (!isAportPolicyDocument(document)) return undefined;
+
         const wordRange = document.getWordRangeAtPosition(position, /[A-Za-z0-9_.-]+/);
         const word = wordRange ? document.getText(wordRange) : "";
         if (POLICY_KEYS.includes(word)) {
@@ -114,8 +118,7 @@ export function deactivate(): void {
 
 const isAportPolicyDocument = (document: vscode.TextDocument): boolean => {
   return (
-    document.languageId === "aport-policy-json" ||
-    document.languageId === "aport-policy-yaml" ||
-    isAportPolicyFileName(document.fileName)
+    isAportPolicyFileName(document.fileName) &&
+    (document.languageId === "json" || document.languageId === "jsonc" || document.languageId === "aport-policy-yaml")
   );
 };

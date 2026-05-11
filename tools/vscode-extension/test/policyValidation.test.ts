@@ -94,4 +94,42 @@ describe("validatePolicyDocument", () => {
     assert.equal(diagnostics.length, 1);
     assert.equal(diagnostics[0].message, 'Rule effect must be one of "allow", "deny", or "review".');
   });
+
+  it("does not treat YAML keys ending in effect as rule effects", () => {
+    const diagnostics = validatePolicyDocument(
+      [
+        "id: data.export.v1",
+        "name: Data Export Policy",
+        "version: 1.0.0",
+        "description: Controls data exports.",
+        "rules:",
+        "  - id: small-export",
+        "    effect: allow",
+        "    action: data.export",
+        "metadata:",
+        "  side_effect: documented",
+      ].join("\n"),
+      "data.aport-policy.yaml"
+    );
+
+    assert.deepEqual(diagnostics, []);
+  });
+
+  it("requires rule ids inside the YAML rules section", () => {
+    const diagnostics = validatePolicyDocument(
+      [
+        "id: data.export.v1",
+        "name: Data Export Policy",
+        "version: 1.0.0",
+        "description: Controls data exports.",
+        "metadata:",
+        "  - id: metadata-item",
+        "rules:",
+      ].join("\n"),
+      "data.aport-policy.yaml"
+    );
+
+    assert.equal(diagnostics.length, 1);
+    assert.equal(diagnostics[0].message, "Policy pack must define at least one rule with an id.");
+  });
 });
