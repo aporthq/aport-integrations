@@ -183,6 +183,7 @@ aport-integrations/
 │   ├── vscode-extension/       # VS Code extension
 │   └── postman-collection/     # Postman collection
 ├── templates/                  # Integration scaffolding templates
+│   ├── django-middleware/      # Django middleware template
 │   ├── javascript-middleware/  # Express.js template
 │   └── python-middleware/      # FastAPI template
 ├── sdk/                        # References to official SDKs
