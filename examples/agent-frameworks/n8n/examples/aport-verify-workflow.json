@@ -1,0 +1,147 @@
+{
+  "name": "APort refund verification example",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "manual-trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "agent-id",
+              "name": "agent_id",
+              "value": "agt_inst_demo_123",
+              "type": "string"
+            },
+            {
+              "id": "order-id",
+              "name": "order_id",
+              "value": "order_1001",
+              "type": "string"
+            },
+            {
+              "id": "refund-amount",
+              "name": "amount",
+              "value": 149.99,
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "sample-refund",
+      "name": "Sample Refund Context",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        500,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "verifyPolicy",
+        "agentId": "={{ $json.agent_id }}",
+        "policyId": "finance.payment.refund.v1",
+        "includeInputJson": true,
+        "contextMode": "json",
+        "contextJson": "{\"source\":\"n8n\",\"workflow\":\"refund-verification\"}",
+        "throwOnDeny": false,
+        "includeRawResponse": true
+      },
+      "id": "aport-verify",
+      "name": "APort Verify Refund",
+      "type": "n8n-nodes-aport.aport",
+      "typeVersion": 1,
+      "position": [
+        760,
+        280
+      ],
+      "credentials": {
+        "aportApi": {
+          "id": "replace-me",
+          "name": "APort API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "aport-verified-route",
+              "leftValue": "={{ $json.aport_route }}",
+              "rightValue": "verified",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "route-by-result",
+      "name": "Route by Verification",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1020,
+        280
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Sample Refund Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sample Refund Context": {
+      "main": [
+        [
+          {
+            "node": "APort Verify Refund",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "APort Verify Refund": {
+      "main": [
+        [
+          {
+            "node": "Route by Verification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
