@@ -1,0 +1,29 @@
+{
+  "name": "create-aport-integration",
+  "version": "0.1.0",
+  "description": "Scaffold APort integrations for common web frameworks",
+  "main": "src/index.js",
+  "bin": {
+    "create-aport-integration": "./src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test",
+    "check": "node --check src/index.js && node --check src/scaffold.js && node --check src/templates.js"
+  },
+  "keywords": [
+    "aport",
+    "scaffold",
+    "cli",
+    "integration",
+    "agent-verification"
+  ],
+  "author": "APort Community",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^12.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
