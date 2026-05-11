@@ -122,7 +122,7 @@ We're actively building the APort ecosystem with **22+ open issues** and **6 iss
 - **Next.js**: App Router and Pages Router support
 - **Django**: Python web framework middleware
 - **Laravel**: PHP framework with Artisan commands
-- **Rails**: Ruby gem with generators
+- **Rails**: Ruby gem with generators (see `templates/ruby-rails/`)
 - **Go Frameworks**: Gin, Echo, Fiber middleware
 
 ### **Protocol Bridges** (Universal Interoperability)
@@ -184,7 +184,8 @@ aport-integrations/
 │   └── postman-collection/     # Postman collection
 ├── templates/                  # Integration scaffolding templates
 │   ├── javascript-middleware/  # Express.js template
-│   └── python-middleware/      # FastAPI template
+│   ├── python-middleware/      # FastAPI template
+│   └── ruby-rails/             # Rails gem template
 ├── sdk/                        # References to official SDKs
 │   └── README.md               # Links to aport-sdks repository
 └── docs/                       # Integration documentation
@@ -248,7 +249,7 @@ Native support for popular web frameworks.
 | FastAPI | Middleware package | ✅ Active | Community |
 | Django | Middleware package | 🚧 In Progress | Community |
 | Laravel | Composer package | 📋 Planned | Community |
-| Rails | Ruby gem | 📋 Planned | Community |
+| Rails | [Ruby gem template](templates/ruby-rails/) | ✅ Active | Community |
 | Go | Official SDK | 🚧 In Progress | Community |
 
 ---
