@@ -162,7 +162,7 @@ npm start
 
 ```bash
 # Use our CLI to scaffold a new integration
-npx create-aport-integration my-integration
+npx create-aport-integration my-integration --template express
 cd my-integration
 npm install
 ```
@@ -179,7 +179,8 @@ aport-integrations/
 │   ├── middleware/             # Express, FastAPI, Django, etc.
 │   └── protocol-bridges/       # OpenAPI, AP2, SPIFFE/SPIRE
 ├── tools/                      # Developer tools and utilities
-│   ├── cli/                    # APort CLI for scaffolding
+│   ├── cli/                    # APort verification/testing CLI
+│   ├── create-aport-integration/ # npx scaffolding CLI
 │   ├── vscode-extension/       # VS Code extension
 │   └── postman-collection/     # Postman collection
 ├── templates/                  # Integration scaffolding templates
@@ -225,7 +226,8 @@ Reduce APort integration time from hours to minutes.
 
 | Tool | Description | Status | Maintainer |
 |------|-------------|--------|------------|
-| [APort CLI](tools/cli/) | `npx create-aport-integration` scaffolding tool | ✅ Active | Community |
+| [APort Verification CLI](tools/cli/) | Test agent verification and passport workflows | ✅ Active | Community |
+| [create-aport-integration](tools/create-aport-integration/) | `npx create-aport-integration` scaffolding tool | ✅ Active | Community |
 | [VS Code Extension](tools/vscode-extension/) | Policy development with IntelliSense | 🚧 In Progress | Community |
 | [Postman Collection](tools/postman-collection/) | Complete API testing collection | ✅ Active | Community |
 

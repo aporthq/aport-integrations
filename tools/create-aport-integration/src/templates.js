@@ -1,0 +1,611 @@
+const DEFAULT_POLICY = "finance.payment.refund.v1";
+
+function createExpressTemplate({ packageName, policy }) {
+  return {
+    description: "Express API with an APort-protected refund endpoint",
+    files: {
+      "package.json": JSON.stringify(
+        {
+          name: packageName,
+          version: "0.1.0",
+          private: true,
+          description: "Express APort integration starter",
+          main: "src/server.js",
+          scripts: {
+            start: "node src/server.js",
+            dev: "node --watch src/server.js",
+          },
+          dependencies: {
+            dotenv: "^16.4.5",
+            express: "^4.19.2",
+          },
+          engines: {
+            node: ">=18.0.0",
+          },
+        },
+        null,
+        2
+      ) + "\n",
+      ".env.example": [
+        "APORT_BASE_URL=https://aport.io",
+        "APORT_API_KEY=your_api_key_here",
+        `APORT_POLICY=${policy}`,
+        "PORT=3000",
+        "",
+      ].join("\n"),
+      "src/aport.js": `const DEFAULT_POLICY = "${policy}";
+
+function normalizeDecision(result) {
+  const decision = result && (result.decision || (result.data && result.data.decision));
+
+  if (decision && Object.prototype.hasOwnProperty.call(decision, "allow")) {
+    return {
+      allowed: Boolean(decision.allow),
+      reason: Array.isArray(decision.reasons)
+        ? decision.reasons.map((reason) => reason.message || reason.code).filter(Boolean).join(", ")
+        : decision.reason,
+      raw: result,
+    };
+  }
+
+  return {
+    allowed: Boolean(result && (result.verified || result.allowed || result.allow)),
+    reason: result && (result.reason || result.message),
+    raw: result,
+  };
+}
+
+async function verifyAportPolicy({ agentId, policy = process.env.APORT_POLICY || DEFAULT_POLICY, context = {} }) {
+  if (!agentId) {
+    return { allowed: false, reason: "Missing agent id", raw: null };
+  }
+
+  const baseUrl = (process.env.APORT_BASE_URL || "https://aport.io").replace(/\\/$/, "");
+  const headers = { "Content-Type": "application/json" };
+
+  if (process.env.APORT_API_KEY) {
+    headers.Authorization = "Bearer " + process.env.APORT_API_KEY;
+  }
+
+  const response = await fetch(baseUrl + "/api/verify/policy/" + encodeURIComponent(policy), {
+    method: "POST",
+    headers,
+    body: JSON.stringify({
+      context: {
+        agent_id: agentId,
+        policy_id: policy,
+        context,
+      },
+    }),
+  });
+
+  const text = await response.text();
+  let body = {};
+
+  try {
+    body = text ? JSON.parse(text) : {};
+  } catch (error) {
+    body = { message: text };
+  }
+
+  if (!response.ok) {
+    return {
+      allowed: false,
+      reason: body.message || "APort request failed with status " + response.status,
+      raw: body,
+    };
+  }
+
+  return normalizeDecision(body);
+}
+
+function extractAgentId(req) {
+  return (
+    req.get("x-agent-id") ||
+    req.get("x-aport-agent-id") ||
+    req.query.agent_id ||
+    req.body.agent_id ||
+    req.body.agentId ||
+    null
+  );
+}
+
+function requireAportPolicy(policy = DEFAULT_POLICY, options = {}) {
+  return async function aportPolicyMiddleware(req, res, next) {
+    try {
+      const agentId = extractAgentId(req);
+      const verification = await verifyAportPolicy({
+        agentId,
+        policy,
+        context: {
+          method: req.method,
+          path: req.path,
+          body: options.includeBody === false ? undefined : req.body,
+        },
+      });
+
+      if (!verification.allowed) {
+        return res.status(403).json({
+          error: "APort policy verification failed",
+          reason: verification.reason || "Policy denied",
+        });
+      }
+
+      req.aport = {
+        agentId,
+        policy,
+        decision: verification.raw,
+      };
+
+      next();
+    } catch (error) {
+      next(error);
+    }
+  };
+}
+
+module.exports = {
+  DEFAULT_POLICY,
+  extractAgentId,
+  normalizeDecision,
+  requireAportPolicy,
+  verifyAportPolicy,
+};
+`,
+      "src/server.js": `require("dotenv").config();
+
+const express = require("express");
+const { requireAportPolicy } = require("./aport");
+
+const app = express();
+const port = process.env.PORT || 3000;
+const policy = process.env.APORT_POLICY || "${policy}";
+
+app.use(express.json());
+
+app.get("/health", (req, res) => {
+  res.json({ ok: true });
+});
+
+app.post("/api/refunds", requireAportPolicy(policy), async (req, res) => {
+  res.json({
+    ok: true,
+    action: "refund-approved",
+    policy,
+    agentId: req.aport.agentId,
+    refund: {
+      amount: req.body.amount,
+      currency: req.body.currency || "USD",
+    },
+  });
+});
+
+app.use((error, req, res, next) => {
+  console.error(error);
+  res.status(500).json({ error: "Internal server error" });
+});
+
+app.listen(port, () => {
+  console.log("APort Express starter listening on http://localhost:" + port);
+});
+`,
+      "README.md": `# ${packageName}
+
+Express starter generated by \`create-aport-integration\`.
+
+## Setup
+
+\`\`\`bash
+npm install
+cp .env.example .env
+npm run dev
+\`\`\`
+
+Set \`APORT_API_KEY\` in \`.env\` before calling protected routes.
+
+## Test the Protected Route
+
+\`\`\`bash
+curl -X POST http://localhost:3000/api/refunds \\
+  -H "Content-Type: application/json" \\
+  -H "X-Agent-ID: ap_example_agent" \\
+  -d '{"amount": 50, "currency": "USD"}'
+\`\`\`
+
+The route verifies the agent against \`${policy}\` before returning a refund approval response.
+`,
+    },
+  };
+}
+
+function createNextTemplate({ packageName, policy }) {
+  return {
+    description: "Next.js App Router project with an APort-protected API route",
+    files: {
+      "package.json": JSON.stringify(
+        {
+          name: packageName,
+          version: "0.1.0",
+          private: true,
+          description: "Next.js APort integration starter",
+          scripts: {
+            dev: "next dev",
+            build: "next build",
+            start: "next start",
+          },
+          dependencies: {
+            next: "^14.2.5",
+            react: "^18.3.1",
+            "react-dom": "^18.3.1",
+          },
+          engines: {
+            node: ">=18.0.0",
+          },
+        },
+        null,
+        2
+      ) + "\n",
+      ".env.example": [
+        "APORT_BASE_URL=https://aport.io",
+        "APORT_API_KEY=your_api_key_here",
+        `APORT_POLICY=${policy}`,
+        "",
+      ].join("\n"),
+      "app/api/refunds/route.js": `import { NextResponse } from "next/server";
+
+const DEFAULT_POLICY = "${policy}";
+
+function normalizeDecision(result) {
+  const decision = result && (result.decision || (result.data && result.data.decision));
+
+  if (decision && Object.prototype.hasOwnProperty.call(decision, "allow")) {
+    return {
+      allowed: Boolean(decision.allow),
+      reason: Array.isArray(decision.reasons)
+        ? decision.reasons.map((reason) => reason.message || reason.code).filter(Boolean).join(", ")
+        : decision.reason,
+      raw: result,
+    };
+  }
+
+  return {
+    allowed: Boolean(result && (result.verified || result.allowed || result.allow)),
+    reason: result && (result.reason || result.message),
+    raw: result,
+  };
+}
+
+async function verifyAportPolicy({ agentId, policy, context }) {
+  if (!agentId) {
+    return { allowed: false, reason: "Missing agent id", raw: null };
+  }
+
+  const baseUrl = (process.env.APORT_BASE_URL || "https://aport.io").replace(/\\/$/, "");
+  const headers = { "Content-Type": "application/json" };
+
+  if (process.env.APORT_API_KEY) {
+    headers.Authorization = "Bearer " + process.env.APORT_API_KEY;
+  }
+
+  const response = await fetch(baseUrl + "/api/verify/policy/" + encodeURIComponent(policy), {
+    method: "POST",
+    headers,
+    body: JSON.stringify({
+      context: {
+        agent_id: agentId,
+        policy_id: policy,
+        context,
+      },
+    }),
+  });
+
+  const text = await response.text();
+  let body = {};
+
+  try {
+    body = text ? JSON.parse(text) : {};
+  } catch (error) {
+    body = { message: text };
+  }
+
+  if (!response.ok) {
+    return {
+      allowed: false,
+      reason: body.message || "APort request failed with status " + response.status,
+      raw: body,
+    };
+  }
+
+  return normalizeDecision(body);
+}
+
+export async function POST(request) {
+  const body = await request.json().catch(() => ({}));
+  const agentId = request.headers.get("x-agent-id") || request.headers.get("x-aport-agent-id") || body.agent_id || body.agentId;
+  const policy = process.env.APORT_POLICY || DEFAULT_POLICY;
+
+  const verification = await verifyAportPolicy({
+    agentId,
+    policy,
+    context: {
+      route: "/api/refunds",
+      amount: body.amount,
+      currency: body.currency || "USD",
+    },
+  });
+
+  if (!verification.allowed) {
+    return NextResponse.json(
+      {
+        error: "APort policy verification failed",
+        reason: verification.reason || "Policy denied",
+      },
+      { status: 403 }
+    );
+  }
+
+  return NextResponse.json({
+    ok: true,
+    action: "refund-approved",
+    policy,
+    agentId,
+    refund: {
+      amount: body.amount,
+      currency: body.currency || "USD",
+    },
+  });
+}
+`,
+      "app/page.js": `export default function Home() {
+  return (
+    <main style={{ fontFamily: "system-ui, sans-serif", margin: "4rem auto", maxWidth: "42rem", lineHeight: 1.5 }}>
+      <h1>APort Next.js Starter</h1>
+      <p>
+        The <code>/api/refunds</code> route verifies agents with APort before approving an action.
+      </p>
+      <pre>
+        {String.raw\`curl -X POST http://localhost:3000/api/refunds \\\\
+  -H "Content-Type: application/json" \\\\
+  -H "X-Agent-ID: ap_example_agent" \\\\
+  -d '{"amount": 50, "currency": "USD"}'\`}
+      </pre>
+    </main>
+  );
+}
+`,
+      "README.md": `# ${packageName}
+
+Next.js App Router starter generated by \`create-aport-integration\`.
+
+## Setup
+
+\`\`\`bash
+npm install
+cp .env.example .env.local
+npm run dev
+\`\`\`
+
+Set \`APORT_API_KEY\` in \`.env.local\` before calling protected routes.
+
+## Test the Protected Route
+
+\`\`\`bash
+curl -X POST http://localhost:3000/api/refunds \\
+  -H "Content-Type: application/json" \\
+  -H "X-Agent-ID: ap_example_agent" \\
+  -d '{"amount": 50, "currency": "USD"}'
+\`\`\`
+
+The route verifies the agent against \`${policy}\` before returning a refund approval response.
+`,
+    },
+  };
+}
+
+function createFastApiTemplate({ packageName, policy }) {
+  return {
+    description: "FastAPI service with an APort-protected refund endpoint",
+    files: {
+      "pyproject.toml": `[project]
+name = "${packageName}"
+version = "0.1.0"
+description = "FastAPI APort integration starter"
+requires-python = ">=3.9"
+dependencies = [
+  "fastapi>=0.111.0",
+  "httpx>=0.27.0",
+  "python-dotenv>=1.0.1",
+  "uvicorn[standard]>=0.30.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.2.0",
+  "pytest-asyncio>=0.23.0"
+]
+`,
+      ".env.example": [
+        "APORT_BASE_URL=https://aport.io",
+        "APORT_API_KEY=your_api_key_here",
+        `APORT_POLICY=${policy}`,
+        "",
+      ].join("\n"),
+      "app/__init__.py": "",
+      "app/main.py": `import os
+from typing import Any
+
+import httpx
+from dotenv import load_dotenv
+from fastapi import FastAPI, Header, HTTPException, Request
+from pydantic import BaseModel
+
+load_dotenv()
+
+DEFAULT_POLICY = "${policy}"
+
+app = FastAPI(title="APort FastAPI Starter")
+
+
+class RefundRequest(BaseModel):
+    amount: float
+    currency: str = "USD"
+    agent_id: str | None = None
+
+
+def normalize_decision(result: dict[str, Any]) -> dict[str, Any]:
+    decision = result.get("decision") or result.get("data", {}).get("decision")
+
+    if isinstance(decision, dict) and "allow" in decision:
+        reasons = decision.get("reasons") or []
+        reason_values = [
+            reason.get("message") or reason.get("code")
+            for reason in reasons
+            if isinstance(reason, dict) and (reason.get("message") or reason.get("code"))
+        ]
+        reason_text = ", ".join(reason_values)
+        return {
+            "allowed": bool(decision["allow"]),
+            "reason": reason_text or decision.get("reason"),
+            "raw": result,
+        }
+
+    return {
+        "allowed": bool(result.get("verified") or result.get("allowed") or result.get("allow")),
+        "reason": result.get("reason") or result.get("message"),
+        "raw": result,
+    }
+
+
+async def verify_aport_policy(agent_id: str | None, policy: str, context: dict[str, Any]) -> dict[str, Any]:
+    if not agent_id:
+        return {"allowed": False, "reason": "Missing agent id", "raw": None}
+
+    base_url = os.getenv("APORT_BASE_URL", "https://aport.io").rstrip("/")
+    headers = {"Content-Type": "application/json"}
+    api_key = os.getenv("APORT_API_KEY")
+
+    if api_key:
+        headers["Authorization"] = f"Bearer {api_key}"
+
+    async with httpx.AsyncClient(timeout=10) as client:
+        response = await client.post(
+            f"{base_url}/api/verify/policy/{policy}",
+            headers=headers,
+            json={
+                "context": {
+                    "agent_id": agent_id,
+                    "policy_id": policy,
+                    "context": context,
+                }
+            },
+        )
+
+    try:
+        body = response.json()
+    except ValueError:
+        body = {"message": response.text}
+
+    if response.status_code >= 400:
+        return {
+            "allowed": False,
+            "reason": body.get("message") or f"APort request failed with status {response.status_code}",
+            "raw": body,
+        }
+
+    return normalize_decision(body)
+
+
+async def require_aport_policy(
+    request: Request,
+    x_agent_id: str | None = Header(default=None),
+    x_aport_agent_id: str | None = Header(default=None),
+) -> dict[str, Any]:
+    body = getattr(request.state, "json_body", None)
+    agent_id = x_agent_id or x_aport_agent_id or (body or {}).get("agent_id") or (body or {}).get("agentId")
+    policy = os.getenv("APORT_POLICY", DEFAULT_POLICY)
+    verification = await verify_aport_policy(
+        agent_id,
+        policy,
+        {
+            "route": str(request.url.path),
+            "method": request.method,
+            "body": body,
+        },
+    )
+
+    if not verification["allowed"]:
+        raise HTTPException(
+            status_code=403,
+            detail={
+                "error": "APort policy verification failed",
+                "reason": verification.get("reason") or "Policy denied",
+            },
+        )
+
+    return {"agent_id": agent_id, "policy": policy, "decision": verification["raw"]}
+
+
+@app.get("/health")
+async def health() -> dict[str, bool]:
+    return {"ok": True}
+
+
+@app.post("/api/refunds")
+async def approve_refund(request: Request, payload: RefundRequest) -> dict[str, Any]:
+    request.state.json_body = payload.model_dump()
+    aport = await require_aport_policy(request)
+
+    return {
+        "ok": True,
+        "action": "refund-approved",
+        "policy": aport["policy"],
+        "agentId": aport["agent_id"],
+        "refund": {
+            "amount": payload.amount,
+            "currency": payload.currency,
+        },
+    }
+`,
+      "README.md": `# ${packageName}
+
+FastAPI starter generated by \`create-aport-integration\`.
+
+## Setup
+
+\`\`\`bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -e .
+cp .env.example .env
+uvicorn app.main:app --reload
+\`\`\`
+
+Set \`APORT_API_KEY\` in \`.env\` before calling protected routes.
+
+## Test the Protected Route
+
+\`\`\`bash
+curl -X POST http://localhost:8000/api/refunds \\
+  -H "Content-Type: application/json" \\
+  -H "X-Agent-ID: ap_example_agent" \\
+  -d '{"amount": 50, "currency": "USD"}'
+\`\`\`
+
+The route verifies the agent against \`${policy}\` before returning a refund approval response.
+`,
+    },
+  };
+}
+
+function getTemplates(context) {
+  return {
+    express: createExpressTemplate(context),
+    nextjs: createNextTemplate(context),
+    fastapi: createFastApiTemplate(context),
+  };
+}
+
+module.exports = {
+  DEFAULT_POLICY,
+  getTemplates,
+};
