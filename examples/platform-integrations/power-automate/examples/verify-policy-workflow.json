@@ -1,0 +1,109 @@
+{
+  "name": "APort policy verification before protected workflow action",
+  "description": "Reference Power Automate cloud flow that verifies an agent passport before continuing.",
+  "definition": {
+    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "$connections": {
+        "type": "Object",
+        "defaultValue": {}
+      }
+    },
+    "triggers": {
+      "manual": {
+        "type": "Request",
+        "kind": "Button",
+        "inputs": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "agent_id": {
+                "type": "string"
+              },
+              "amount": {
+                "type": "number"
+              },
+              "request_id": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "agent_id",
+              "amount",
+              "request_id"
+            ]
+          }
+        }
+      }
+    },
+    "actions": {
+      "Verify_policy": {
+        "type": "OpenApiConnection",
+        "inputs": {
+          "host": {
+            "apiId": "/providers/Microsoft.PowerApps/apis/shared_aport",
+            "connectionName": "shared_aport",
+            "operationId": "VerifyPolicy"
+          },
+          "parameters": {
+            "policyId": "finance.payment.refund.v1",
+            "body": {
+              "context": {
+                "agent_id": "@triggerBody()?['agent_id']",
+                "policy_id": "finance.payment.refund.v1",
+                "context": {
+                  "amount": "@triggerBody()?['amount']",
+                  "currency": "USD",
+                  "request_id": "@triggerBody()?['request_id']",
+                  "source": "power-automate"
+                }
+              }
+            }
+          }
+        },
+        "runAfter": {}
+      },
+      "Branch_on_verification": {
+        "type": "If",
+        "expression": {
+          "equals": [
+            "@body('Verify_policy')?['verified']",
+            true
+          ]
+        },
+        "actions": {
+          "Continue_protected_action": {
+            "type": "Compose",
+            "inputs": {
+              "status": "approved",
+              "agent_id": "@triggerBody()?['agent_id']",
+              "request_id": "@triggerBody()?['request_id']",
+              "passport": "@body('Verify_policy')?['passport']"
+            }
+          }
+        },
+        "else": {
+          "actions": {
+            "Stop_with_policy_denial": {
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Failed",
+                "runError": {
+                  "code": "APortPolicyDenied",
+                  "message": "APort did not verify the agent for finance.payment.refund.v1."
+                }
+              }
+            }
+          }
+        },
+        "runAfter": {
+          "Verify_policy": [
+            "Succeeded"
+          ]
+        }
+      }
+    },
+    "outputs": {}
+  }
+}
