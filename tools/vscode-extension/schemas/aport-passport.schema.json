@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aport.io/schemas/aport-passport.schema.json",
+  "title": "APort Agent Passport",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "agent_id": {
+      "type": "string",
+      "description": "Agent passport identifier.",
+      "pattern": "^(agt|ap)_[A-Za-z0-9_\\-]+$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable agent name."
+    },
+    "description": {
+      "type": "string",
+      "description": "Short explanation of what this agent is allowed to do."
+    },
+    "capabilities": {
+      "type": "array",
+      "description": "Capability grants attached to this passport.",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "name": {
+            "type": "string",
+            "examples": [
+              "refund:create",
+              "data:export",
+              "repository:merge"
+            ]
+          },
+          "description": {
+            "type": "string"
+          },
+          "limits": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    "limits": {
+      "type": "object",
+      "description": "Global limits for this passport.",
+      "additionalProperties": {
+        "type": [
+          "string",
+          "number",
+          "integer",
+          "boolean"
+        ]
+      }
+    },
+    "verification_level": {
+      "type": "string",
+      "enum": [
+        "email",
+        "github",
+        "domain",
+        "enterprise"
+      ]
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "required": [
+    "agent_id",
+    "name",
+    "capabilities"
+  ]
+}

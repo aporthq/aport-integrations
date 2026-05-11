@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aport.io/schemas/aport-policy.schema.json",
+  "title": "APort Policy Configuration",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "policy_pack": {
+      "type": "string",
+      "description": "APort policy pack identifier.",
+      "examples": [
+        "finance.payment.refund.v1",
+        "data.export.v1",
+        "code.repository.merge.v1",
+        "admin.access.v1"
+      ]
+    },
+    "agent_id": {
+      "type": "string",
+      "description": "Agent passport identifier.",
+      "pattern": "^(agt|ap)_[A-Za-z0-9_\\-]+$"
+    },
+    "verification_level": {
+      "type": "string",
+      "description": "Required assurance level for this policy.",
+      "enum": [
+        "email",
+        "github",
+        "domain",
+        "enterprise"
+      ]
+    },
+    "context": {
+      "type": "object",
+      "description": "Runtime facts supplied to APort verify calls.",
+      "additionalProperties": true
+    },
+    "limits": {
+      "type": "object",
+      "description": "Policy-specific limits.",
+      "additionalProperties": {
+        "type": [
+          "string",
+          "number",
+          "integer",
+          "boolean"
+        ]
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "description": "Capabilities required by this policy.",
+      "items": {
+        "type": "string",
+        "examples": [
+          "refund:create",
+          "data:export",
+          "repository:merge"
+        ]
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Optional integration metadata.",
+      "additionalProperties": true
+    }
+  },
+  "required": [
+    "policy_pack"
+  ]
+}

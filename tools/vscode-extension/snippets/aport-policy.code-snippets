@@ -1,0 +1,53 @@
+{
+  "APort policy file": {
+    "prefix": "aport-policy",
+    "description": "Create an APort policy verification file.",
+    "body": [
+      "{",
+      "  \"policy_pack\": \"${1:finance.payment.refund.v1}\",",
+      "  \"agent_id\": \"${2:agt_inst_refund_bot_123}\",",
+      "  \"verification_level\": \"${3:github}\",",
+      "  \"context\": {",
+      "    \"${4:amount}\": ${5:50},",
+      "    \"currency\": \"${6:USD}\"",
+      "  },",
+      "  \"limits\": {",
+      "    \"${7:refund_amount_max_per_tx}\": ${8:100}",
+      "  }",
+      "}"
+    ]
+  },
+  "APort passport file": {
+    "prefix": "aport-passport",
+    "description": "Create an APort passport fixture.",
+    "body": [
+      "{",
+      "  \"agent_id\": \"${1:agt_inst_refund_bot_123}\",",
+      "  \"name\": \"${2:Refund Bot}\",",
+      "  \"description\": \"${3:Handles customer refund requests}\",",
+      "  \"verification_level\": \"${4:github}\",",
+      "  \"capabilities\": [",
+      "    {",
+      "      \"name\": \"${5:refund:create}\",",
+      "      \"limits\": {",
+      "        \"refund_amount_max_per_tx\": ${6:100}",
+      "      }",
+      "    }",
+      "  ]",
+      "}"
+    ]
+  },
+  "APort capability": {
+    "prefix": "aport-capability",
+    "description": "Add an APort capability object.",
+    "body": [
+      "{",
+      "  \"name\": \"${1:refund:create}\",",
+      "  \"description\": \"${2:Allows the agent to create refund requests}\",",
+      "  \"limits\": {",
+      "    \"${3:refund_amount_max_per_tx}\": ${4:100}",
+      "  }",
+      "}"
+    ]
+  }
+}
