@@ -247,7 +247,7 @@ Native support for popular web frameworks.
 | Express.js | Middleware package | ✅ Active | Community |
 | FastAPI | Middleware package | ✅ Active | Community |
 | Django | Middleware package | 🚧 In Progress | Community |
-| Laravel | Composer package | 📋 Planned | Community |
+| Laravel | [Composer package](examples/middleware/laravel/) | ✅ Active | Community |
 | Rails | Ruby gem | 📋 Planned | Community |
 | Go | Official SDK | 🚧 In Progress | Community |
 
