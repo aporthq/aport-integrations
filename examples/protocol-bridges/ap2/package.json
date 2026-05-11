@@ -1,0 +1,29 @@
+{
+  "name": "aport-ap2-bridge-example",
+  "version": "0.1.0",
+  "description": "Proof-of-concept APort Passport authorization bridge for AP2 payment intents",
+  "main": "src/index.js",
+  "scripts": {
+    "example": "node examples/payment-flow.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "keywords": [
+    "aport",
+    "ap2",
+    "agent-payments",
+    "payment-authorization",
+    "passport"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@aporthq/sdk-node": ">=0.1.0"
+  },
+  "peerDependenciesMeta": {
+    "@aporthq/sdk-node": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
