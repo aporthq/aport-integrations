@@ -1,0 +1,57 @@
+{
+  "name": "Verify APort policy before approval",
+  "description": "Reference flow outline for importing the connector into a manual approval workflow.",
+  "trigger": {
+    "type": "manual",
+    "inputs": {
+      "agent_id": "agt_inst_123",
+      "policy_id": "code.repository.merge.v1",
+      "repository": "aporthq/aport-integrations",
+      "action": "pull_request.merge"
+    }
+  },
+  "steps": [
+    {
+      "name": "Verify policy",
+      "connectorOperation": "VerifyPolicy",
+      "parameters": {
+        "policyId": "@{triggerBody()?['policy_id']}",
+        "body": {
+          "context": {
+            "agent_id": "@{triggerBody()?['agent_id']}",
+            "policy_id": "@{triggerBody()?['policy_id']}",
+            "context": {
+              "repository": "@{triggerBody()?['repository']}",
+              "action": "@{triggerBody()?['action']}",
+              "flow_run": "@{workflow().run.name}"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Check verification",
+      "type": "condition",
+      "expression": "@and(equals(body('Verify_policy')?['verified'], true), not(equals(body('Verify_policy')?['allowed'], false)))",
+      "ifTrue": [
+        {
+          "name": "Start approval",
+          "type": "approval",
+          "message": "APort verification passed. Continue the protected workflow action."
+        }
+      ],
+      "ifFalse": [
+        {
+          "name": "Notify denial",
+          "type": "notification",
+          "message": "APort verification failed or denied the requested action."
+        },
+        {
+          "name": "Terminate",
+          "type": "terminate",
+          "status": "Cancelled"
+        }
+      ]
+    }
+  ]
+}

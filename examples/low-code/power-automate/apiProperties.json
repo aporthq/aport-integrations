@@ -1,0 +1,23 @@
+{
+  "properties": {
+    "connectionParameters": {
+      "api_key": {
+        "type": "securestring",
+        "uiDefinition": {
+          "displayName": "APort API key",
+          "description": "Enter the complete Authorization header value: Bearer <APORT_API_KEY>.",
+          "tooltip": "The connector sends this value in the Authorization header.",
+          "constraints": {
+            "tabIndex": 2,
+            "clearText": false,
+            "required": "true"
+          }
+        }
+      }
+    },
+    "iconBrandColor": "#06b6d4",
+    "capabilities": [],
+    "publisher": "APort Community",
+    "stackOwner": "APort"
+  }
+}
