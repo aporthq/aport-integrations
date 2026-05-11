@@ -241,6 +241,8 @@ Position APort as the universal verify layer.
 ### 🛠️ **Core Framework SDKs & Middleware**
 Native support for popular web frameworks.
 
+Rails middleware is available in [examples/middleware/rails/](examples/middleware/rails/).
+
 | Framework | SDK/Middleware | Status | Maintainer |
 |-----------|----------------|--------|------------|
 | Next.js | Middleware package | ✅ Active | Community |
@@ -248,7 +250,7 @@ Native support for popular web frameworks.
 | FastAPI | Middleware package | ✅ Active | Community |
 | Django | Middleware package | 🚧 In Progress | Community |
 | Laravel | Composer package | 📋 Planned | Community |
-| Rails | Ruby gem | 📋 Planned | Community |
+| Rails | [Ruby gem](examples/middleware/rails/) | Active | Community |
 | Go | Official SDK | 🚧 In Progress | Community |
 
 ---
