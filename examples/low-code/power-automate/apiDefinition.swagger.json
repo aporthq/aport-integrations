@@ -1,0 +1,500 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "APort",
+    "description": "Verify APort agent passports and policy decisions from Microsoft Power Automate flows.",
+    "version": "1.0.0"
+  },
+  "host": "aport.io",
+  "basePath": "/",
+  "schemes": ["https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Use a Bearer token value, for example: Bearer <APORT_API_KEY>."
+    }
+  },
+  "security": [
+    {
+      "api_key": []
+    }
+  ],
+  "paths": {
+    "/api/verify/policy/{policyId}": {
+      "post": {
+        "summary": "Verify policy",
+        "description": "Verify an agent passport against an APort policy pack before a flow continues.",
+        "operationId": "VerifyPolicy",
+        "parameters": [
+          {
+            "name": "policyId",
+            "in": "path",
+            "description": "Policy pack identifier, such as code.repository.merge.v1.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/VerifyPolicyRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Policy verification result.",
+            "schema": {
+              "$ref": "#/definitions/VerifyPolicyResponse"
+            }
+          },
+          "400": {
+            "description": "The request is missing required context or contains invalid values.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "The APort API key is missing or invalid.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "The agent is not allowed to perform the requested action.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "APort service error.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/verify/{agentId}": {
+      "get": {
+        "summary": "Verify passport",
+        "description": "Verify an agent passport with a policy pack and JSON context.",
+        "operationId": "VerifyPassport",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "Agent passport identifier.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "policy_pack",
+            "in": "query",
+            "description": "Policy pack identifier.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "context",
+            "in": "query",
+            "description": "JSON-encoded context object for the verification decision.",
+            "required": false,
+            "type": "string",
+            "default": "{}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Passport verification result.",
+            "schema": {
+              "$ref": "#/definitions/VerifyPolicyResponse"
+            }
+          },
+          "400": {
+            "description": "The query parameters are invalid.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "The APort API key is missing or invalid.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/policies": {
+      "get": {
+        "summary": "List policy packs",
+        "description": "List policy packs available to Power Automate flows.",
+        "operationId": "ListPolicyPacks",
+        "responses": {
+          "200": {
+            "description": "Policy pack list.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PolicyPack"
+              }
+            }
+          },
+          "401": {
+            "description": "The APort API key is missing or invalid.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/policies/{policyId}": {
+      "get": {
+        "summary": "Get policy pack",
+        "description": "Get metadata for one APort policy pack.",
+        "operationId": "GetPolicyPack",
+        "parameters": [
+          {
+            "name": "policyId",
+            "in": "path",
+            "description": "Policy pack identifier.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Policy pack metadata.",
+            "schema": {
+              "$ref": "#/definitions/PolicyPack"
+            }
+          },
+          "404": {
+            "description": "Policy pack not found.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/issue": {
+      "post": {
+        "summary": "Create passport",
+        "description": "Issue a new APort agent passport from a flow.",
+        "operationId": "CreatePassport",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreatePassportRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Created passport.",
+            "schema": {
+              "$ref": "#/definitions/Passport"
+            }
+          },
+          "400": {
+            "description": "Passport data is invalid.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "The APort API key is missing or invalid.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/passports/{agentId}": {
+      "get": {
+        "summary": "Get passport",
+        "description": "Retrieve a passport by agent identifier.",
+        "operationId": "GetPassport",
+        "parameters": [
+          {
+            "name": "agentId",
+            "in": "path",
+            "description": "Agent passport identifier.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Passport data.",
+            "schema": {
+              "$ref": "#/definitions/Passport"
+            }
+          },
+          "401": {
+            "description": "The APort API key is missing or invalid.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Passport not found.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/suspend": {
+      "post": {
+        "summary": "Suspend passport",
+        "description": "Suspend an APort agent passport.",
+        "operationId": "SuspendPassport",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SuspendPassportRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Suspension result.",
+            "schema": {
+              "$ref": "#/definitions/SuspendPassportResponse"
+            }
+          },
+          "400": {
+            "description": "Suspension request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "The APort API key is missing or invalid.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "VerifyPolicyRequest": {
+      "type": "object",
+      "required": ["context"],
+      "properties": {
+        "context": {
+          "type": "object",
+          "required": ["agent_id", "policy_id"],
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "description": "Agent passport identifier."
+            },
+            "policy_id": {
+              "type": "string",
+              "description": "Policy pack identifier. Keep this equal to the policyId path value."
+            },
+            "context": {
+              "type": "object",
+              "description": "Workflow-specific verification context.",
+              "additionalProperties": true
+            }
+          }
+        }
+      },
+      "example": {
+        "context": {
+          "agent_id": "agt_inst_123",
+          "policy_id": "code.repository.merge.v1",
+          "context": {
+            "repository": "aporthq/aport-integrations",
+            "action": "pull_request.merge",
+            "risk_score": 0.2
+          }
+        }
+      }
+    },
+    "VerifyPolicyResponse": {
+      "type": "object",
+      "properties": {
+        "verified": {
+          "type": "boolean",
+          "description": "Whether the agent is verified for the policy."
+        },
+        "allowed": {
+          "type": "boolean",
+          "description": "Whether the requested action is allowed."
+        },
+        "agent_id": {
+          "type": "string"
+        },
+        "policy_id": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string",
+          "description": "Decision explanation, if provided."
+        },
+        "passport": {
+          "$ref": "#/definitions/Passport"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "CreatePassportRequest": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Human-readable agent name."
+        },
+        "role": {
+          "type": "string",
+          "description": "Agent role or purpose."
+        },
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "limits": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "Passport": {
+      "type": "object",
+      "properties": {
+        "agent_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "limits": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "PolicyPack": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "SuspendPassportRequest": {
+      "type": "object",
+      "required": ["agent_id"],
+      "properties": {
+        "agent_id": {
+          "type": "string",
+          "description": "Agent passport identifier."
+        },
+        "reason": {
+          "type": "string",
+          "description": "Operational reason for suspension.",
+          "default": "Suspended from Power Automate"
+        }
+      }
+    },
+    "SuspendPassportResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "agent_id": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "error": {
+          "type": "string"
+        },
+        "details": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}
