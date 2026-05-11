@@ -1,0 +1,125 @@
+{
+  "name": "aport-vscode-extension",
+  "displayName": "APort Developer Tools",
+  "description": "Snippets, syntax highlighting, and IntelliSense helpers for APort integrations.",
+  "version": "0.1.0",
+  "publisher": "aport-community",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Snippets",
+    "Programming Languages",
+    "Other"
+  ],
+  "keywords": [
+    "aport",
+    "agent-verification",
+    "passport",
+    "policy",
+    "intellisense"
+  ],
+  "activationEvents": [
+    "onLanguage:aport-policy",
+    "onLanguage:json",
+    "onLanguage:jsonc",
+    "onLanguage:yaml",
+    "onCommand:aport.openDocs"
+  ],
+  "main": "./out/extension.js",
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "test": "node tests/manifest.test.js",
+    "vscode:prepublish": "npm run compile"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "aport.openDocs",
+        "title": "APort: Open Documentation",
+        "category": "APort"
+      }
+    ],
+    "languages": [
+      {
+        "id": "aport-policy",
+        "aliases": [
+          "APort Policy",
+          "aport-policy"
+        ],
+        "extensions": [
+          ".aport-policy"
+        ],
+        "filenames": [
+          "APortfile"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "aport-policy",
+        "scopeName": "source.aport-policy",
+        "path": "./syntaxes/aport-policy.tmLanguage.json"
+      },
+      {
+        "scopeName": "aport.json.injection",
+        "path": "./syntaxes/aport-json-injection.tmLanguage.json",
+        "injectTo": [
+          "source.json"
+        ]
+      }
+    ],
+    "jsonValidation": [
+      {
+        "fileMatch": [
+          "*.aport.json",
+          "*.aport-policy.json",
+          "aport.policy.json"
+        ],
+        "url": "./schemas/aport-policy.schema.json"
+      },
+      {
+        "fileMatch": [
+          "*.aport-passport.json",
+          "aport-passport.json",
+          "aport.passport.json"
+        ],
+        "url": "./schemas/aport-passport.schema.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "javascript",
+        "path": "./snippets/aport-javascript.code-snippets"
+      },
+      {
+        "language": "typescript",
+        "path": "./snippets/aport-typescript.code-snippets"
+      },
+      {
+        "language": "json",
+        "path": "./snippets/aport-policy.code-snippets"
+      },
+      {
+        "language": "jsonc",
+        "path": "./snippets/aport-policy.code-snippets"
+      },
+      {
+        "language": "aport-policy",
+        "path": "./snippets/aport-policy.code-snippets"
+      },
+      {
+        "language": "yaml",
+        "path": "./snippets/aport-yaml.code-snippets"
+      }
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.8",
+    "@types/vscode": "^1.90.0",
+    "typescript": "^5.5.2"
+  }
+}

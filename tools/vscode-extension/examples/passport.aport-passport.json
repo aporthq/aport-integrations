@@ -1,0 +1,18 @@
+{
+  "agent_id": "agt_inst_refund_bot_123",
+  "name": "Refund Bot",
+  "description": "Handles customer refund requests with APort verification.",
+  "verification_level": "github",
+  "capabilities": [
+    {
+      "name": "refund:create",
+      "description": "Create refund requests",
+      "limits": {
+        "refund_amount_max_per_tx": 100
+      }
+    }
+  ],
+  "metadata": {
+    "framework": "APort VS Code Extension"
+  }
+}

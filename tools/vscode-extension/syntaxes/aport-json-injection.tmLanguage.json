@@ -1,0 +1,24 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "APort JSON Injection",
+  "scopeName": "aport.json.injection",
+  "injectionSelector": "L:source.json",
+  "patterns": [
+    {
+      "name": "support.type.property-name.aport",
+      "match": "\"(?:agent_id|policy_pack|context|capabilities|limits|verification_level|expires_at|metadata|rules|effect|condition|actions)\"(?=\\s*:)"
+    },
+    {
+      "name": "entity.name.function.aport.policy-pack",
+      "match": "\"(?:finance\\.payment\\.refund|data\\.export|code\\.repository\\.merge|admin\\.access)\\.v\\d+\""
+    },
+    {
+      "name": "constant.other.aport.agent-id",
+      "match": "\"(?:agt|ap)_[A-Za-z0-9_-]+\""
+    },
+    {
+      "name": "support.constant.aport.capability",
+      "match": "\"(?:refund|data|repository|admin|message):[A-Za-z0-9_-]+\""
+    }
+  ]
+}

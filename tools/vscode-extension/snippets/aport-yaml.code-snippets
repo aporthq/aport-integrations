@@ -1,0 +1,28 @@
+{
+  "APort GitHub Actions verify step": {
+    "prefix": "aport-action",
+    "description": "Add an APort verify step to a GitHub Actions workflow.",
+    "body": [
+      "- name: APort Verify",
+      "  uses: aporthq/policy-verify-action@v1",
+      "  with:",
+      "    agent-id: \\${{ secrets.${1:APORT_AGENT_ID} }}",
+      "    policy-pack: \"${2:code.repository.merge.v1}\"",
+      "    api-key: \\${{ secrets.${3:APORT_API_KEY} }}"
+    ]
+  },
+  "APort policy YAML": {
+    "prefix": "aport-policy",
+    "description": "Create a YAML APort policy fixture.",
+    "body": [
+      "policy_pack: ${1:finance.payment.refund.v1}",
+      "agent_id: ${2:agt_inst_refund_bot_123}",
+      "verification_level: ${3:github}",
+      "context:",
+      "  ${4:amount}: ${5:50}",
+      "  currency: ${6:USD}",
+      "limits:",
+      "  ${7:refund_amount_max_per_tx}: ${8:100}"
+    ]
+  }
+}

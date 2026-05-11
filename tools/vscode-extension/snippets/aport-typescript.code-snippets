@@ -1,0 +1,81 @@
+{
+  "APort verify request": {
+    "prefix": "aport-verify",
+    "description": "Verify an APort agent against a policy pack.",
+    "body": [
+      "import { APortClient } from \"@aporthq/sdk-node\";",
+      "",
+      "const aport = new APortClient({",
+      "  apiKey: process.env.APORT_API_KEY,",
+      "});",
+      "",
+      "const result = await aport.verify(",
+      "  \"${1:finance.payment.refund.v1}\",",
+      "  \"${2:agt_inst_refund_bot_123}\",",
+      "  { ${3:amount}: ${4:50} }",
+      ");",
+      "",
+      "if (!result.allowed) {",
+      "  throw new Error(result.reason ?? \"APort verification failed\");",
+      "}"
+    ]
+  },
+  "APort Next.js middleware": {
+    "prefix": "aport-next-middleware",
+    "description": "Protect Next.js routes with APort verification.",
+    "body": [
+      "import { NextResponse, type NextRequest } from \"next/server\";",
+      "import { createAPortMiddleware } from \"@aporthq/nextjs-middleware\";",
+      "",
+      "const verifyAgent = createAPortMiddleware({",
+      "  policyPack: \"${1:finance.payment.refund.v1}\",",
+      "  agentIdHeader: \"${2:x-agent-id}\",",
+      "  apiKey: process.env.APORT_API_KEY,",
+      "});",
+      "",
+      "export async function middleware(request: NextRequest) {",
+      "  const verification = await verifyAgent(request);",
+      "",
+      "  if (!verification.allowed) {",
+      "    return NextResponse.json(",
+      "      { error: verification.reason ?? \"APort verification failed\" },",
+      "      { status: 403 }",
+      "    );",
+      "  }",
+      "",
+      "  return NextResponse.next();",
+      "}",
+      "",
+      "export const config = {",
+      "  matcher: [\"${3:/api/refunds/:path*}\"],",
+      "};"
+    ]
+  },
+  "APort passport type": {
+    "prefix": "aport-passport-type",
+    "description": "Create a typed APort passport payload.",
+    "body": [
+      "type APortPassport = {",
+      "  name: string;",
+      "  description: string;",
+      "  capabilities: Array<{",
+      "    name: string;",
+      "    limits?: Record<string, string | number | boolean>;",
+      "  }>;",
+      "};",
+      "",
+      "const passport: APortPassport = {",
+      "  name: \"${1:Refund Bot}\",",
+      "  description: \"${2:Handles customer refund requests}\",",
+      "  capabilities: [",
+      "    {",
+      "      name: \"${3:refund:create}\",",
+      "      limits: {",
+      "        refund_amount_max_per_tx: ${4:100},",
+      "      },",
+      "    },",
+      "  ],",
+      "};"
+    ]
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "APort verify request": {
+    "prefix": "aport-verify",
+    "description": "Verify an APort agent against a policy pack.",
+    "body": [
+      "const { APortClient } = require(\"@aporthq/sdk-node\");",
+      "",
+      "const aport = new APortClient({",
+      "  apiKey: process.env.APORT_API_KEY,",
+      "});",
+      "",
+      "const result = await aport.verify(",
+      "  \"${1:finance.payment.refund.v1}\",",
+      "  \"${2:agt_inst_refund_bot_123}\",",
+      "  { ${3:amount}: ${4:50} }",
+      ");",
+      "",
+      "if (!result.allowed) {",
+      "  throw new Error(result.reason || \"APort verification failed\");",
+      "}"
+    ]
+  },
+  "APort Express middleware": {
+    "prefix": "aport-express",
+    "description": "Protect an Express route with APort middleware.",
+    "body": [
+      "const { createAPortMiddleware } = require(\"@aporthq/middleware-express\");",
+      "",
+      "const aportMiddleware = createAPortMiddleware({",
+      "  policyPack: \"${1:finance.payment.refund.v1}\",",
+      "  agentId: \"${2:agt_inst_refund_bot_123}\",",
+      "  apiKey: process.env.APORT_API_KEY,",
+      "});",
+      "",
+      "app.post(\"${3:/refunds}\", aportMiddleware, async (req, res) => {",
+      "  res.json({ ok: true });",
+      "});"
+    ]
+  },
+  "APort passport object": {
+    "prefix": "aport-passport",
+    "description": "Create an APort passport payload.",
+    "body": [
+      "const passport = {",
+      "  name: \"${1:Refund Bot}\",",
+      "  description: \"${2:Handles customer refund requests}\",",
+      "  capabilities: [",
+      "    {",
+      "      name: \"${3:refund:create}\",",
+      "      limits: {",
+      "        refund_amount_max_per_tx: ${4:100}",
+      "      }",
+      "    }",
+      "  ],",
+      "};"
+    ]
+  }
+}

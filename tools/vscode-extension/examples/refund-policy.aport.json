@@ -1,0 +1,14 @@
+{
+  "policy_pack": "finance.payment.refund.v1",
+  "agent_id": "agt_inst_refund_bot_123",
+  "verification_level": "github",
+  "context": {
+    "amount": 50,
+    "currency": "USD",
+    "order_id": "ord_123"
+  },
+  "limits": {
+    "refund_amount_max_per_tx": 100,
+    "refunds_per_day": 20
+  }
+}
