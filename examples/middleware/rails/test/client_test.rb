@@ -38,6 +38,44 @@ class APortRailsClientTest < Minitest::Test
     assert_equal ["refund"], result.passport["capabilities"]
   end
 
+  def test_verify_accepts_top_level_decision_allow
+    stub_request(:post, "https://aport.test/api/verify/policy/refund")
+      .to_return(
+        status: 200,
+        body: {
+          decision: {
+            allow: true,
+            reasons: [{ code: "ok", message: "allowed" }]
+          }
+        }.to_json,
+        headers: { "Content-Type" => "application/json" }
+      )
+
+    result = APortRails::Client.new.verify(policy: "refund", agent_id: "agt_123")
+
+    assert result.verified?
+  end
+
+  def test_verify_accepts_nested_data_decision_allow
+    stub_request(:post, "https://aport.test/api/verify/policy/refund")
+      .to_return(
+        status: 200,
+        body: {
+          verified: "false",
+          data: {
+            decision: {
+              allow: true
+            }
+          }
+        }.to_json,
+        headers: { "Content-Type" => "application/json" }
+      )
+
+    result = APortRails::Client.new.verify(policy: "refund", agent_id: "agt_123")
+
+    assert result.verified?
+  end
+
   def test_verify_raises_api_error_for_non_success_response
     stub_request(:post, "https://aport.test/api/verify/policy/refund")
       .to_return(status: 403, body: { message: "blocked" }.to_json)

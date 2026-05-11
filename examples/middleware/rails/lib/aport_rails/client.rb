@@ -37,7 +37,7 @@ module APortRails
       parsed = parse_response(response)
 
       VerificationResult.new(
-        verified: truthy?(parsed["verified"] || parsed["allowed"] || parsed["success"]),
+        verified: verification_allowed?(parsed),
         agent_id: parsed["agent_id"] || parsed.dig("passport", "agent_id") || agent_id,
         passport: parsed["passport"] || {},
         policy: parsed["policy"] || policy,
@@ -93,6 +93,16 @@ module APortRails
       raise APIError, "APort API error #{response.code}: #{message}"
     rescue JSON::ParserError
       raise APIError, "APort API returned invalid JSON"
+    end
+
+    def verification_allowed?(parsed)
+      [
+        parsed["verified"],
+        parsed["allowed"],
+        parsed["success"],
+        parsed.dig("decision", "allow"),
+        parsed.dig("data", "decision", "allow")
+      ].any? { |value| truthy?(value) }
     end
 
     def truthy?(value)
