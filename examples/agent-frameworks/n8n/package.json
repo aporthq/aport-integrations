@@ -1,0 +1,35 @@
+{
+  "name": "n8n-nodes-aport",
+  "version": "0.1.0",
+  "description": "n8n community node for APort passport verification and policy checks",
+  "main": "nodes/Aport/Aport.node.js",
+  "scripts": {
+    "test": "node --test tests/*.test.js"
+  },
+  "keywords": [
+    "n8n-community-node-package",
+    "n8n",
+    "aport",
+    "passport",
+    "policy",
+    "verification"
+  ],
+  "author": "APort Community",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.10"
+  },
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "credentials/AportApi.credentials.js"
+    ],
+    "nodes": [
+      "nodes/Aport/Aport.node.js"
+    ]
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  },
+  "devDependencies": {}
+}
