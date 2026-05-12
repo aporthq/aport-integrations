@@ -1,0 +1,32 @@
+{
+  "name": "aport-github-pr-verifier",
+  "version": "1.0.0",
+  "description": "GitHub App example that verifies pull requests with APort policies",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "jest"
+  },
+  "keywords": [
+    "aport",
+    "github-app",
+    "pull-request",
+    "policy",
+    "security"
+  ],
+  "author": "APort Community",
+  "license": "MIT",
+  "dependencies": {
+    "@octokit/auth-app": "^7.0.0",
+    "@octokit/rest": "^20.1.1",
+    "@octokit/webhooks": "^12.0.12",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
