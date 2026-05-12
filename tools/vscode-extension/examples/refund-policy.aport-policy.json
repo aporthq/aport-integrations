@@ -1,0 +1,27 @@
+{
+  "policy": {
+    "id": "finance.payment.refund.v1",
+    "version": "1.0.0",
+    "description": "Allow refund actions only for verified agents with refund capability"
+  },
+  "rules": [
+    {
+      "id": "require-refund-capability",
+      "effect": "allow",
+      "condition": "agent.capabilities.includes('payments.refund')",
+      "reason": "Agent must have refund capability"
+    },
+    {
+      "id": "deny-large-refunds",
+      "effect": "deny",
+      "condition": "context.amount > limits.max_refund_amount",
+      "reason": "Refund amount exceeds policy limit"
+    }
+  ],
+  "limits": {
+    "max_refund_amount": 500
+  },
+  "metadata": {
+    "owner": "finance"
+  }
+}

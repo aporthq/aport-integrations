@@ -1,0 +1,7 @@
+.vscode/**
+src/test/**
+out/test/**
+node_modules/**
+*.tgz
+*.vsix
+coverage/**

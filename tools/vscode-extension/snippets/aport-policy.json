@@ -1,0 +1,38 @@
+{
+  "APort policy pack": {
+    "prefix": "aport-policy",
+    "body": [
+      "{",
+      "  \"policy\": {",
+      "    \"id\": \"${1:code.repository.merge.v1}\",",
+      "    \"version\": \"${2:1.0.0}\",",
+      "    \"description\": \"${3:Require APort verification before repository changes}\"",
+      "  },",
+      "  \"rules\": [",
+      "    {",
+      "      \"id\": \"${4:require-maintainer-assurance}\",",
+      "      \"effect\": \"${5|allow,deny|}\",",
+      "      \"condition\": \"${6:agent.assurance_level >= 2}\",",
+      "      \"reason\": \"${7:Agent must meet the required assurance level}\"",
+      "    }",
+      "  ],",
+      "  \"limits\": {",
+      "    \"max_files_changed\": ${8:25}",
+      "  }",
+      "}"
+    ],
+    "description": "Create an APort policy pack document"
+  },
+  "APort policy rule": {
+    "prefix": "aport-rule",
+    "body": [
+      "{",
+      "  \"id\": \"${1:rule-id}\",",
+      "  \"effect\": \"${2|allow,deny|}\",",
+      "  \"condition\": \"${3:agent.capabilities.includes('repo.merge')}\",",
+      "  \"reason\": \"${4:Agent is missing the required capability}\"",
+      "}"
+    ],
+    "description": "Create an APort policy rule"
+  }
+}
