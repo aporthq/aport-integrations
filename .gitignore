@@ -136,3 +136,6 @@ temp/
 *.aport
 aport-config.json
 HACKTOBERFEST-STRATEGY.md
+__pycache__/
+*.pyc
+.pytest_cache/
