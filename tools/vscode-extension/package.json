@@ -1,0 +1,109 @@
+{
+  "name": "aport-policy-tools",
+  "displayName": "APort Policy Tools",
+  "description": "Syntax highlighting, validation, snippets, and IntelliSense for APort policy packs.",
+  "version": "0.1.0",
+  "publisher": "aport-community",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters",
+    "Snippets"
+  ],
+  "keywords": [
+    "aport",
+    "policy",
+    "agent",
+    "validation",
+    "intellisense"
+  ],
+  "activationEvents": [
+    "onLanguage:aport-policy",
+    "onCommand:aportPolicy.validate",
+    "onCommand:aportPolicy.insertSamplePolicy"
+  ],
+  "main": "./out/extension.js",
+  "scripts": {
+    "compile": "tsc -p ./",
+    "test": "npm run compile && node --test out/test/*.test.js",
+    "check": "npm run compile && node --check out/extension.js && node --check out/policyValidator.js"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "aportPolicy.validate",
+        "title": "APort: Validate Policy Pack"
+      },
+      {
+        "command": "aportPolicy.insertSamplePolicy",
+        "title": "APort: Insert Sample Policy Pack"
+      }
+    ],
+    "configuration": {
+      "title": "APort Policy Tools",
+      "properties": {
+        "aportPolicy.defaultPolicyId": {
+          "type": "string",
+          "default": "code.repository.merge.v1",
+          "description": "Default policy id used by snippets and sample policy generation."
+        },
+        "aportPolicy.validateOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Run policy validation when an APort policy document is saved."
+        }
+      }
+    },
+    "jsonValidation": [
+      {
+        "fileMatch": [
+          "*.aport-policy.json",
+          ".github/aport-policy.json"
+        ],
+        "url": "./schemas/aport-policy.schema.json"
+      }
+    ],
+    "languages": [
+      {
+        "id": "aport-policy",
+        "aliases": [
+          "APort Policy",
+          "aport-policy"
+        ],
+        "extensions": [
+          ".aport-policy",
+          ".aport-policy.json",
+          ".aport-policy.yaml",
+          ".aport-policy.yml"
+        ],
+        "filenames": [
+          "aport-policy.json",
+          "aport-policy.yaml",
+          "aport-policy.yml"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "aport-policy",
+        "scopeName": "source.aport-policy",
+        "path": "./syntaxes/aport-policy.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "aport-policy",
+        "path": "./snippets/aport-policy.json"
+      }
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "@types/vscode": "1.90.0",
+    "typescript": "^5.5.4"
+  }
+}

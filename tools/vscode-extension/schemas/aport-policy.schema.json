@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aport.io/schemas/aport-policy.schema.json",
+  "title": "APort Policy Pack",
+  "type": "object",
+  "required": ["policy", "rules"],
+  "additionalProperties": true,
+  "properties": {
+    "policy": {
+      "type": "object",
+      "required": ["id", "version"],
+      "additionalProperties": true,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z]+(\\.[a-z0-9_-]+)+\\.v[0-9]+$",
+          "description": "Stable policy pack id, such as code.repository.merge.v1."
+        },
+        "version": {
+          "type": "string",
+          "description": "Policy pack version."
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "rules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "effect", "condition"],
+        "additionalProperties": true,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "effect": {
+            "type": "string",
+            "enum": ["allow", "deny"]
+          },
+          "condition": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": {
+        "type": ["number", "string", "boolean"]
+      }
+    },
+    "metadata": {
+      "type": "object"
+    }
+  }
+}
