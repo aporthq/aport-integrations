@@ -89,4 +89,10 @@ The tests stub APort HTTP calls, so they do not require a live APort account.
 
 ## Example App
 
-See `examples/basic_app` for a minimal Rails controller and route setup.
+See `examples/basic_app` for a bootable minimal Rails app:
+
+```bash
+cd examples/basic_app
+bundle install
+APORT_API_KEY=your_api_key bundle exec rails server
+```

@@ -6,9 +6,18 @@ controller action with APort verification.
 ## Files
 
 - `Gemfile` adds `aport_rails`
+- `config/application.rb` boots a minimal Rails app
+- `config.ru` exposes the app to Rack-compatible servers
 - `config/routes.rb` exposes `POST /refunds`
 - `app/controllers/application_controller.rb` includes the controller base
 - `app/controllers/refunds_controller.rb` protects the action with APort
+
+## Run
+
+```bash
+bundle install
+APORT_API_KEY=your_api_key bundle exec rails server
+```
 
 ## Request
 

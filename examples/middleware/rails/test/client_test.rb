@@ -63,8 +63,11 @@ class APortRailsClientTest < Minitest::Test
         body: {
           verified: "false",
           data: {
+            passport: { agent_id: "agt_nested", tier: "gold" },
+            message: "allowed by nested decision",
             decision: {
-              allow: true
+              allow: true,
+              reasons: [{ code: "policy_match" }]
             }
           }
         }.to_json,
@@ -74,6 +77,10 @@ class APortRailsClientTest < Minitest::Test
     result = APortRails::Client.new.verify(policy: "refund", agent_id: "agt_123")
 
     assert result.verified?
+    assert_equal "agt_nested", result.agent_id
+    assert_equal "gold", result.passport["tier"]
+    assert_equal "allowed by nested decision", result.message
+    assert_equal [{ "code" => "policy_match" }], result.details["reasons"]
   end
 
   def test_verify_raises_api_error_for_non_success_response

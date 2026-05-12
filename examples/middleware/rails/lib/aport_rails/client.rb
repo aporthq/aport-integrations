@@ -35,14 +35,16 @@ module APortRails
 
       response = post_json(verify_uri(policy), verification_payload(policy, agent_id, context))
       parsed = parse_response(response)
+      data = response_data(parsed)
+      decision = response_decision(parsed, data)
 
       VerificationResult.new(
         verified: verification_allowed?(parsed),
-        agent_id: parsed["agent_id"] || parsed.dig("passport", "agent_id") || agent_id,
-        passport: parsed["passport"] || {},
-        policy: parsed["policy"] || policy,
-        message: parsed["message"],
-        details: parsed["details"] || {},
+        agent_id: parsed["agent_id"] || data["agent_id"] || parsed.dig("passport", "agent_id") || data.dig("passport", "agent_id") || agent_id,
+        passport: parsed["passport"] || data["passport"] || {},
+        policy: parsed["policy"] || data["policy"] || policy,
+        message: parsed["message"] || data["message"] || decision["message"],
+        details: parsed["details"] || data["details"] || decision_details(decision),
         raw: parsed
       )
     end
@@ -107,6 +109,21 @@ module APortRails
 
     def truthy?(value)
       value == true || value.to_s.downcase == "true"
+    end
+
+    def response_data(parsed)
+      parsed["data"].is_a?(Hash) ? parsed["data"] : {}
+    end
+
+    def response_decision(parsed, data)
+      decision = parsed["decision"] || data["decision"]
+      decision.is_a?(Hash) ? decision : {}
+    end
+
+    def decision_details(decision)
+      return {} if decision.empty?
+
+      decision.slice("reasons", "reason", "code").compact
     end
 
     def blank?(value)
