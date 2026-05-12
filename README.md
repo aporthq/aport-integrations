@@ -220,6 +220,15 @@ Prove the refund use case with working platform integrations.
 | [WooCommerce Plugin](examples/ecommerce/woocommerce/) | WordPress plugin for order/refund verification | 🚧 In Progress | Community |
 | [Stripe Connect Verification](examples/ecommerce/stripe/) | Webhook handler for Stripe Connect payouts | 📋 Planned | Community |
 
+### 🔌 **Platform Integrations**
+Bring APort verification into platforms that already govern developer workflows.
+
+| Integration | Description | Status | Maintainer |
+|-------------|-------------|--------|------------|
+| [GitHub PR Verifier](examples/platform-integrations/github-app/) | GitHub App for APort-backed PR checks | ✅ Active | Community |
+| Zapier App | Custom Zapier app for APort verification | 🚧 In Progress | Community |
+| Discord Bot | Team verification workflows | 📋 Planned | Community |
+
 ### 🔧 **Developer Experience Tools**
 Reduce APort integration time from hours to minutes.
 
