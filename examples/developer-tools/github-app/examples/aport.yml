@@ -1,0 +1,9 @@
+enabled: true
+checkName: APort policy check
+policy: code.repository.merge.v1
+failOnError: true
+agent:
+  source: author-login
+context:
+  includeFiles: true
+  includeLabels: true

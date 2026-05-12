@@ -1,0 +1,28 @@
+{
+  "name": "aport-github-pr-verifier",
+  "version": "0.1.0",
+  "private": true,
+  "description": "GitHub App example that verifies pull requests with APort policy checks",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "probot run ./src/index.js",
+    "test": "node --test",
+    "check": "node --check src/index.js && node --check src/aport.js && node --check src/checks.js && node --check src/config.js"
+  },
+  "keywords": [
+    "aport",
+    "github-app",
+    "probot",
+    "pull-request",
+    "policy-verification"
+  ],
+  "author": "APort Community",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "probot": "^13.4.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
