@@ -226,6 +226,7 @@ Reduce APort integration time from hours to minutes.
 | Tool | Description | Status | Maintainer |
 |------|-------------|--------|------------|
 | [APort CLI](tools/cli/) | `npx create-aport-integration` scaffolding tool | ✅ Active | Community |
+| [GitHub PR Verification App](examples/developer-tools/github-app/) | Enforce APort policy checks on pull requests | ✅ Active | Community |
 | [VS Code Extension](tools/vscode-extension/) | Policy development with IntelliSense | 🚧 In Progress | Community |
 | [Postman Collection](tools/postman-collection/) | Complete API testing collection | ✅ Active | Community |
 
