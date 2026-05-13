@@ -1,0 +1,7 @@
+source "https://rubygems.org"
+
+gem "aport_rails", path: "../.."
+gem "actionpack", "~> 7.0.8"
+gem "activesupport", "~> 7.0.8"
+gem "railties", "~> 7.0.8"
+gem "tzinfo-data", ">= 1.2024", platforms: %i[mingw mswin x64_mingw jruby]
