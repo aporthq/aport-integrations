@@ -2,9 +2,9 @@ source "https://rubygems.org"
 
 gemspec
 
-# Rails 7.0 avoids the irb/rdoc/psych dependency chain that requires native
-# libyaml headers on fresh Windows RubyInstaller setups.
+# Rails 7.0 keeps the example dependency set small and avoids extra native
+# dependency setup in fresh Ruby environments.
 gem "actionpack", "~> 7.0.8"
 gem "activesupport", "~> 7.0.8"
 gem "railties", "~> 7.0.8"
-gem "tzinfo-data", ">= 1.2024", platforms: %i[mingw mswin x64_mingw jruby]
+gem "tzinfo-data", "~> 1.2024", platforms: %i[mingw mswin x64_mingw jruby]
