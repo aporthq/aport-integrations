@@ -1,0 +1,29 @@
+{
+  "name": "aport-discord-verifier",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Discord bot for verifying team workflow actions with APort",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "register": "node src/register-commands.js",
+    "test": "node --test",
+    "check": "node --check src/index.js && node --check src/register-commands.js && node --check src/aport.js && node --check src/commands.js"
+  },
+  "keywords": [
+    "aport",
+    "discord",
+    "bot",
+    "policy-verification",
+    "team-workflows"
+  ],
+  "author": "APort Community",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.15.3",
+    "dotenv": "^16.4.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
