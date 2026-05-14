@@ -236,7 +236,7 @@ Position APort as the universal verify layer.
 |--------|-------------|--------|------------|
 | [OpenAPI 3.1 Spec](examples/protocol-bridges/openapi/) | Complete OpenAPI specification | ✅ Active | Community |
 | [AP2 Bridge](examples/protocol-bridges/ap2/) | APort passport authorization for AP2 payments | 📋 Planned | Community |
-| [SPIFFE/SPIRE Integration](examples/protocol-bridges/spiffe/) | Enterprise identity federation | 📋 Planned | Community |
+| [SPIFFE/SPIRE Integration](examples/protocol-bridges/spiffe-spire/) | Enterprise identity federation | ✅ Active | Community |
 
 ### 🛠️ **Core Framework SDKs & Middleware**
 Native support for popular web frameworks.
