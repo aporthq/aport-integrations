@@ -217,7 +217,7 @@ Prove the refund use case with working platform integrations.
 | Integration | Description | Status | Maintainer |
 |-------------|-------------|--------|------------|
 | [Shopify Refund Guardrail](examples/ecommerce/shopify/) | Complete Shopify app with APort verification | ✅ Active | Community |
-| [WooCommerce Plugin](examples/ecommerce/woocommerce/) | WordPress plugin for order/refund verification | 🚧 In Progress | Community |
+| [WooCommerce Plugin](examples/ecommerce/woocommerce/) | WordPress plugin for order/refund verification | ✅ Active | Community |
 | [Stripe Connect Verification](examples/ecommerce/stripe/) | Webhook handler for Stripe Connect payouts | 📋 Planned | Community |
 
 ### 🔧 **Developer Experience Tools**
