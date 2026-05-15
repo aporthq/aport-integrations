@@ -184,7 +184,8 @@ aport-integrations/
 │   └── postman-collection/     # Postman collection
 ├── templates/                  # Integration scaffolding templates
 │   ├── javascript-middleware/  # Express.js template
-│   └── python-middleware/      # FastAPI template
+│   ├── python-middleware/      # FastAPI template
+│   └── laravel-middleware/     # Laravel Composer package template
 ├── sdk/                        # References to official SDKs
 │   └── README.md               # Links to aport-sdks repository
 └── docs/                       # Integration documentation
@@ -247,7 +248,7 @@ Native support for popular web frameworks.
 | Express.js | Middleware package | ✅ Active | Community |
 | FastAPI | Middleware package | ✅ Active | Community |
 | Django | Middleware package | 🚧 In Progress | Community |
-| Laravel | Composer package | 📋 Planned | Community |
+| Laravel | [Composer package](templates/laravel-middleware/) | ✅ Active | Community |
 | Rails | Ruby gem | 📋 Planned | Community |
 | Go | Official SDK | 🚧 In Progress | Community |
 
