@@ -1,0 +1,18 @@
+{
+  "id": 9002,
+  "order_id": 12346,
+  "created_at": "2026-05-15T00:00:00Z",
+  "transactions": [
+    {
+      "amount": "9999.00",
+      "currency": "USD"
+    }
+  ],
+  "refund_line_items": [
+    {
+      "line_item_id": 2,
+      "quantity": 4,
+      "restock_type": "no_restock"
+    }
+  ]
+}

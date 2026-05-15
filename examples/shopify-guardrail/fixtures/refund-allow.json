@@ -1,0 +1,18 @@
+{
+  "id": 9001,
+  "order_id": 12345,
+  "created_at": "2026-05-15T00:00:00Z",
+  "transactions": [
+    {
+      "amount": "42.00",
+      "currency": "USD"
+    }
+  ],
+  "refund_line_items": [
+    {
+      "line_item_id": 1,
+      "quantity": 1,
+      "restock_type": "return"
+    }
+  ]
+}

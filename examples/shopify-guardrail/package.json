@@ -1,0 +1,16 @@
+{
+  "name": "aport-shopify-refund-guardrail",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Shopify refund webhook guardrail backed by APort payments.refund.v1 verification.",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test tests/*.test.js",
+    "replay:allow": "node scripts/replay-webhook.js fixtures/refund-allow.json",
+    "replay:deny": "node scripts/replay-webhook.js fixtures/refund-deny.json"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
