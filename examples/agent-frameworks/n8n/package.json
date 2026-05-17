@@ -1,0 +1,37 @@
+{
+  "name": "n8n-nodes-aport",
+  "version": "0.1.0",
+  "description": "n8n community node for routing workflows with APort passport and policy verification.",
+  "license": "MIT",
+  "author": "APort Community",
+  "main": "nodes/APortVerify/APortVerify.node.js",
+  "scripts": {
+    "test": "node --test tests/*.test.js"
+  },
+  "files": [
+    "credentials",
+    "nodes",
+    "workflows",
+    "README.md"
+  ],
+  "keywords": [
+    "n8n-community-node-package",
+    "n8n",
+    "aport",
+    "agent-verification",
+    "passport",
+    "policy-checks"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "credentials/APortApi.credentials.js"
+    ],
+    "nodes": [
+      "nodes/APortVerify/APortVerify.node.js"
+    ]
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
