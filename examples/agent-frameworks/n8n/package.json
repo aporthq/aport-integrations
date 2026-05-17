@@ -1,0 +1,33 @@
+{
+  "name": "n8n-nodes-aport-policy-check",
+  "version": "0.1.0",
+  "description": "n8n community node for APort policy verification.",
+  "license": "MIT",
+  "author": "APort community",
+  "keywords": [
+    "n8n-community-node-package",
+    "n8n",
+    "aport",
+    "policy",
+    "verification"
+  ],
+  "main": "index.js",
+  "files": [
+    "credentials",
+    "nodes",
+    "index.js",
+    "README.md"
+  ],
+  "scripts": {
+    "smoke": "node test/smoke.js",
+    "test": "npm run smoke"
+  },
+  "n8n": {
+    "credentials": [
+      "credentials/APortApi.credentials.js"
+    ],
+    "nodes": [
+      "nodes/APortPolicyCheck/APortPolicyCheck.node.js"
+    ]
+  }
+}
