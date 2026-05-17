@@ -1,0 +1,98 @@
+{
+  "name": "APort verification routing example",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "manual-trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "agent-id",
+              "name": "agent_id",
+              "value": "agt_inst_demo_123",
+              "type": "string"
+            },
+            {
+              "id": "action",
+              "name": "action",
+              "value": "refund",
+              "type": "string"
+            },
+            {
+              "id": "amount",
+              "name": "amount",
+              "value": 25,
+              "type": "number"
+            }
+          ]
+        }
+      },
+      "id": "sample-context",
+      "name": "Sample Context",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [
+        460,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "passportId": "={{$json.agent_id}}",
+        "policyPack": "finance.payment.refund.v1",
+        "contextMode": "input",
+        "includeInputData": true
+      },
+      "id": "aport-verify",
+      "name": "APort Verify",
+      "type": "n8n-nodes-aport.aportVerify",
+      "typeVersion": 1,
+      "position": [
+        700,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Sample Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sample Context": {
+      "main": [
+        [
+          {
+            "node": "APort Verify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": []
+}
