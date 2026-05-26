@@ -246,6 +246,7 @@ Native support for popular web frameworks.
 | Next.js | Middleware package | ✅ Active | Community |
 | Express.js | Middleware package | ✅ Active | Community |
 | FastAPI | Middleware package | ✅ Active | Community |
+| [ASP.NET Core Minimal API](examples/frameworks/aspnetcore-minimal-api/) | Endpoint filter example for APort policy checks | ✅ Active | Community |
 | Django | Middleware package | 🚧 In Progress | Community |
 | Laravel | Composer package | 📋 Planned | Community |
 | Rails | Ruby gem | 📋 Planned | Community |
