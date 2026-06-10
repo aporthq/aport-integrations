@@ -179,7 +179,8 @@ aport-integrations/
 │   ├── middleware/             # Express, FastAPI, Django, etc.
 │   └── protocol-bridges/       # OpenAPI, AP2, SPIFFE/SPIRE
 ├── tools/                      # Developer tools and utilities
-│   ├── cli/                    # APort CLI for scaffolding
+│   ├── create-aport-integration/ # APort integration scaffolding CLI
+│   ├── cli/                    # APort verification CLI
 │   ├── vscode-extension/       # VS Code extension
 │   └── postman-collection/     # Postman collection
 ├── templates/                  # Integration scaffolding templates
@@ -225,7 +226,8 @@ Reduce APort integration time from hours to minutes.
 
 | Tool | Description | Status | Maintainer |
 |------|-------------|--------|------------|
-| [APort CLI](tools/cli/) | `npx create-aport-integration` scaffolding tool | ✅ Active | Community |
+| [create-aport-integration](tools/create-aport-integration/) | `npx create-aport-integration` scaffolding tool for Express, Next.js, and Django | ✅ Active | Community |
+| [APort CLI](tools/cli/) | Agent verification and passport management CLI | ✅ Active | Community |
 | [VS Code Extension](tools/vscode-extension/) | Policy development with IntelliSense | 🚧 In Progress | Community |
 | [Postman Collection](tools/postman-collection/) | Complete API testing collection | ✅ Active | Community |
 

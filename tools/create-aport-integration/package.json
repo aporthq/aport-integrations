@@ -1,0 +1,22 @@
+{
+  "name": "create-aport-integration",
+  "version": "0.1.0",
+  "description": "Scaffold APort integrations for common frameworks",
+  "bin": {
+    "create-aport-integration": "./src/index.js"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "keywords": [
+    "aport",
+    "cli",
+    "scaffold",
+    "integration"
+  ],
+  "author": "APort Community",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
