@@ -1,0 +1,36 @@
+{
+  "name": "APort refund approval guardrail",
+  "description": "Example Power Automate flow shape using the APort Verification connector before approving a refund.",
+  "trigger": {
+    "type": "manual",
+    "inputs": {
+      "order_id": "order_123",
+      "amount": 25,
+      "currency": "USD",
+      "requested_by": "support@example.com"
+    }
+  },
+  "actions": [
+    {
+      "name": "Verify refund with APort",
+      "connector": "APort Verification",
+      "operationId": "VerifyAction",
+      "body": {
+        "policy_pack": "finance.payment.refund.v1",
+        "context": {
+          "action": "approve_refund",
+          "resource": "@triggerBody()['order_id']",
+          "amount": "@triggerBody()['amount']",
+          "currency": "@triggerBody()['currency']",
+          "actor": "@triggerBody()['requested_by']"
+        }
+      }
+    },
+    {
+      "name": "Condition - decision allow",
+      "expression": "@equals(body('Verify_refund_with_APort')?['decision']?['allow'], true)",
+      "if_yes": "Continue refund workflow",
+      "if_no": "Stop workflow and notify reviewer"
+    }
+  ]
+}
