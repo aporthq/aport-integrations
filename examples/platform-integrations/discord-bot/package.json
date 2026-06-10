@@ -1,0 +1,27 @@
+{
+  "name": "aport-discord-verification-bot",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Discord bot example for verifying team actions with APort",
+  "main": "src/bot.js",
+  "scripts": {
+    "start": "node src/bot.js",
+    "register": "node src/register-commands.js",
+    "test": "node --test"
+  },
+  "keywords": [
+    "aport",
+    "discord",
+    "bot",
+    "verification"
+  ],
+  "author": "APort Community",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.16.3",
+    "dotenv": "^16.4.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
