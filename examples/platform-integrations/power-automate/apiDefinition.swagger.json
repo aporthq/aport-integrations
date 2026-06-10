@@ -1,0 +1,161 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "APort Verification",
+    "description": "Power Automate custom connector for verifying workflow actions with APort.",
+    "version": "1.0.0"
+  },
+  "host": "aport.io",
+  "basePath": "/api",
+  "schemes": ["https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Bearer token. Enter `Bearer YOUR_APORT_API_KEY` when creating the connection."
+    }
+  },
+  "security": [
+    {
+      "api_key": []
+    }
+  ],
+  "paths": {
+    "/verify": {
+      "post": {
+        "summary": "Verify an action",
+        "description": "Verifies an action against an APort policy pack before a Power Automate workflow continues.",
+        "operationId": "VerifyAction",
+        "x-ms-visibility": "important",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/VerifyActionRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Verification decision returned by APort.",
+            "schema": {
+              "$ref": "#/definitions/VerifyActionResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid verification request."
+          },
+          "401": {
+            "description": "Missing or invalid APort API key."
+          },
+          "429": {
+            "description": "APort rate limit reached."
+          },
+          "500": {
+            "description": "APort service error."
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "VerifyActionRequest": {
+      "type": "object",
+      "required": ["policy_pack", "context"],
+      "properties": {
+        "policy_pack": {
+          "type": "string",
+          "description": "APort policy pack id.",
+          "x-ms-summary": "Policy pack",
+          "default": "finance.payment.refund.v1"
+        },
+        "context": {
+          "type": "object",
+          "description": "Workflow action context sent to APort.",
+          "x-ms-summary": "Action context",
+          "additionalProperties": true,
+          "properties": {
+            "action": {
+              "type": "string",
+              "description": "Action being verified.",
+              "default": "approve_refund"
+            },
+            "actor": {
+              "type": "string",
+              "description": "User or automation requesting the action."
+            },
+            "amount": {
+              "type": "number",
+              "format": "double",
+              "description": "Optional amount for finance workflows."
+            },
+            "resource": {
+              "type": "string",
+              "description": "Optional resource id, such as an order id."
+            }
+          }
+        }
+      }
+    },
+    "VerifyActionResponse": {
+      "type": "object",
+      "properties": {
+        "decision": {
+          "$ref": "#/definitions/APortDecision"
+        },
+        "data": {
+          "type": "object",
+          "description": "Some APort deployments wrap the decision under data.",
+          "properties": {
+            "decision": {
+              "$ref": "#/definitions/APortDecision"
+            }
+          }
+        }
+      }
+    },
+    "APortDecision": {
+      "type": "object",
+      "properties": {
+        "allow": {
+          "type": "boolean",
+          "description": "True when the workflow may continue."
+        },
+        "decision_id": {
+          "type": "string",
+          "description": "APort decision id for audit logs."
+        },
+        "expires_in": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Decision lifetime in seconds."
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Verification",
+      "description": "APort workflow verification operations"
+    }
+  ]
+}

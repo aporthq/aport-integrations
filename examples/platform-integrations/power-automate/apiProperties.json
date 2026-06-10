@@ -1,0 +1,22 @@
+{
+  "properties": {
+    "connectionParameters": {
+      "api_key": {
+        "type": "securestring",
+        "uiDefinition": {
+          "displayName": "APort API key",
+          "description": "Use the format: Bearer YOUR_APORT_API_KEY",
+          "tooltip": "APort Authorization header value",
+          "constraints": {
+            "tabIndex": 2,
+            "clearText": false,
+            "required": "true"
+          }
+        }
+      }
+    },
+    "iconBrandColor": "#1f2937",
+    "capabilities": [],
+    "policyTemplateInstances": []
+  }
+}

@@ -175,6 +175,7 @@ npm install
 aport-integrations/
 ├── examples/                    # Working integration examples
 │   ├── agent-frameworks/        # LangChain, CrewAI, n8n, etc.
+│   ├── platform-integrations/   # Power Automate, Discord, GitHub, etc.
 │   ├── ecommerce/              # Shopify, WooCommerce, Stripe
 │   ├── middleware/             # Express, FastAPI, Django, etc.
 │   └── protocol-bridges/       # OpenAPI, AP2, SPIFFE/SPIRE
@@ -219,6 +220,13 @@ Prove the refund use case with working platform integrations.
 | [Shopify Refund Guardrail](examples/ecommerce/shopify/) | Complete Shopify app with APort verification | ✅ Active | Community |
 | [WooCommerce Plugin](examples/ecommerce/woocommerce/) | WordPress plugin for order/refund verification | 🚧 In Progress | Community |
 | [Stripe Connect Verification](examples/ecommerce/stripe/) | Webhook handler for Stripe Connect payouts | 📋 Planned | Community |
+
+### ⚙️ **Automation Platform Integrations**
+Bring APort checks into workflow automation tools.
+
+| Integration | Description | Status | Maintainer |
+|-------------|-------------|--------|------------|
+| [Power Automate Connector](examples/platform-integrations/power-automate/) | Custom connector definition for APort workflow verification | ✅ Active | Community |
 
 ### 🔧 **Developer Experience Tools**
 Reduce APort integration time from hours to minutes.
