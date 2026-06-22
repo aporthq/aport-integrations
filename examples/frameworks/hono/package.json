@@ -1,0 +1,27 @@
+{
+  "name": "aport-hono-framework-example",
+  "version": "1.0.0",
+  "description": "Runnable APort verification example for Hono applications",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node examples/server.js",
+    "test": "node --test"
+  },
+  "keywords": [
+    "aport",
+    "hono",
+    "middleware",
+    "agent-verification",
+    "policy"
+  ],
+  "author": "APort Community",
+  "license": "MIT",
+  "dependencies": {
+    "hono": "^4.6.16",
+    "@hono/node-server": "^1.13.8"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
