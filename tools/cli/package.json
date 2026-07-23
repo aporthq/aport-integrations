@@ -16,7 +16,8 @@
     "cli",
     "agent-verification",
     "passport",
-    "hacktoberfest"
+    "hacktoberfest",
+    "n8n"
   ],
   "author": "APort Community",
   "license": "MIT",
