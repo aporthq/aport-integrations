@@ -1,0 +1,11 @@
+{
+  "name": "n8n-nodes-aport",
+  "version": "1.0.0",
+  "description": "Custom n8n node for APort agent verification",
+  "main": "APortVerify.node.js",
+  "author": "APort Community",
+  "license": "MIT",
+  "dependencies": {
+    "@aporthq/sdk-node": "^0.1.0"
+  }
+}
