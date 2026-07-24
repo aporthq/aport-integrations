@@ -1,0 +1,27 @@
+{
+  "name": "n8n-aport-policy-check",
+  "version": "1.0.0",
+  "description": "n8n custom node for APort policy verification",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "n8n",
+    "aport",
+    "policy",
+    "verification",
+    "node"
+  ],
+  "author": "APort Community",
+  "license": "MIT",
+  "dependencies": {
+    "@aporthq/sdk-node": "^0.1.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
