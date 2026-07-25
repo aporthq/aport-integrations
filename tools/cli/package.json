@@ -33,5 +33,9 @@
   },
   "engines": {
     "node": ">=18.0.0"
-  }
+  },
+  "files": [
+    "src/",
+    "src/n8n-node.js"
+  ]
 }
