@@ -1,0 +1,29 @@
+{
+  "name": "n8n-aport-node",
+  "version": "1.0.0",
+  "description": "Custom n8n node for APort policy verification",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "keywords": [
+    "n8n",
+    "aport",
+    "node",
+    "workflow",
+    "automation"
+  ],
+  "author": "APort Community",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^29.5.2",
+    "@types/node": "^20.4.2",
+    "jest": "^29.6.1",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "axios": "^1.4.0"
+  }
+}
