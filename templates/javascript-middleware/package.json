@@ -15,7 +15,9 @@
     "middleware",
     "express",
     "security",
-    "verification"
+    "verification",
+    "n8n",
+    "node"
   ],
   "author": "APort Community",
   "license": "MIT",
