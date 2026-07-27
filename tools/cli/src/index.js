@@ -5,6 +5,7 @@ const chalk = require("chalk");
 const ora = require("ora");
 const inquirer = require("inquirer");
 const APortClient = require("./client");
+const { APortVerifyNode } = require("./n8n-node");
 
 const program = new Command();
 
