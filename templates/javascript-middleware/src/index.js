@@ -1,3 +1,5 @@
+const { APortPolicyCheckNode } = require('./n8n-node');
+
 /**
  * Mock APort Client for template demonstration
  * In production, replace with: const { APortClient } = require("@aporthq/sdk-node");
@@ -151,4 +153,5 @@ module.exports = {
   createAPortMiddleware,
   createPolicyChecker,
   extractAgentId,
+  APortPolicyCheckNode,
 };
